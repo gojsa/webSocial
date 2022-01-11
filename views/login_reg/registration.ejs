@@ -41,45 +41,63 @@
 
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Register</title>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <link rel="stylesheet" href="css/style.css">
-        <link rel="stylesheet" href="css/register.css">
-    </head>
 
-    <body>
-        
+<head>
+    <title>Register</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/register.css">
+    <script src="js/Zlibrary.js"></script>
+</head>
 
-        <div class="register">
-            <form action="/registration" method="post" >
-                <h1 style="text-align: center;">Register</h1> </br>
-            
-                <span class="icon"><i class="fa fa-user"></i></span>
-                <input type="text" name="firstname" class="input1" placeholder="Firstname" >
+<body>
 
-                <span class="icon2"><i class="fa fa-user"></i></span>
-                <input type="text" name="lastname" class="input1" placeholder="Lastname" > </br>
-
-                <span class="icon"><i class="fa fa-user"></i></span>
-                <input type="text" name="username" class="input2" placeholder="Username" > </br>
-
-                <span class="icon"><i class="fa fa-calendar"></i></span>
-                <input type="date" name="birthdate" class="input2" placeholder="Data of birth" style="color: #e5eaf0;"> </br>
-
-                <span class="icon"><i class="fa fa-envelope"></i></span>
-                <input type="email" name="email" class="input2" placeholder="Email"> </br>
-
-                <span class="icon"><i class="fa fa-lock"></i></span>
-                <input type="password" name="password" class="input1" placeholder="Password">
-
-                <span class="icon2"><i class="fa fa-unlock"></i></span>
-                <input type="password" name="cpassword" class="input1" placeholder="Confirm password"> </br>
-
-                <input type="submit" name="register-users" class="button-register" value="Register">
-
-            </form>  
+    <!-- /registration -->
+    <div class="register">
+        <form action="">
+            <h1 style="text-align: center;">Register</h1> </br>
+            <div>
+            <span class="icon"><i class="fa fa-user"></i></span>
+            <input type="text" name="firstname" id="name" class="input1" placeholder="Firstname">
         </div>
+        <div>
+            <span class="icon2"><i class="fa fa-user"></i></span>
+            <input type="text" name="lastname" id="lastName" class="input1" placeholder="Lastname"> </br>
+        </div>
+            <span class="icon"><i class="fa fa-user"></i></span>
+            <input type="text" name="username" class="input2" placeholder="Username"> </br>
 
-    </body>
+            <span class="icon"><i class="fa fa-calendar"></i></span>
+            <input type="date" name="birthdate" class="input2" placeholder="Data of birth" style="color: #e5eaf0;">
+            </br>
+
+            <span class="icon"><i class="fa fa-envelope"></i></span>
+            <input type="email" name="email" class="input2" placeholder="Email"> </br>
+
+            <span class="icon"><i class="fa fa-lock"></i></span>
+            <input type="password" name="password" class="input1" id="password" placeholder="Password">
+
+            <span class="icon2"><i class="fa fa-unlock"></i></span>
+            <input type="password" name="cpassword" class="input1" id="repassword" placeholder="Confirm password"> </br>
+
+            <input type="submit" name="register-users" id="register_id_button" class="button-register" value="Register">
+
+        </form>
+        <p id="errorMessage"></p>
+        <script>
+            const button = Z("register_id_button");
+            button.addEventListener("click", (event) => {
+                GojsaCheckPass("password", "repassword")
+                if (Zv("password") !== Zv("repassword")) {
+                    event.preventDefault();
+                    Z("errorMessage").textContent = "Password doesn't match"
+                }
+            })
+
+            GojsaMessageError("register_id_button","Field mast have soma value","name","lastName")
+        </script>
+    </div>
+
+</body>
+
 </html>

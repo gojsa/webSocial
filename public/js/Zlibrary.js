@@ -375,7 +375,7 @@ function GojsaMessageError() {
     button.setAttribute("type", "")
     for (var i = 0; i < arguments.length; i++) {
        
-        if (i > 2) {
+        if (i > 1) {
 
             arr.push(arguments[i]);
             arr2.push(arguments[i]);
@@ -448,7 +448,7 @@ function GojsaMessageError() {
                 div.style.transition = "opacity 1s";
                 let polje = Z(arr[i])
                 polje.style.borderColor = "#ff0000";
-                polje.style.width = "100%";
+                // polje.style.width = "100%";
                 polje.parentElement.style.display = "block"
 
 
@@ -752,5 +752,3 @@ function GojsaCapsLockCheck(item, message) {
 //             Z("input1").value = e.data;
 //         }
 //     })
-
-GojsaMessageError("button_login","form_login_id","Input must have some value","username","password")
