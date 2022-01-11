@@ -56,30 +56,35 @@
     <div class="register">
         <form action="">
             <h1 style="text-align: center;">Register</h1> </br>
+            <div style="display: inline !important;">
+                <span class="icon"><i class="fa fa-user"></i></span>
+                <input type="text" name="firstname" id="name" class="input1" placeholder="Firstname">
+            </div>
+            <div style="display: inline !important;">
+                <span class="icon2"><i class="fa fa-user"></i></span>
+                <input type="text" name="lastname" id="lastName" class="input1" placeholder="Lastname"> </br>
+            </div>
+            <span class="icon"><i class="fa fa-user"></i></span>
+            <input type="text" name="username" id="username" class="input2" placeholder="Username"> </br>
             <div>
-            <span class="icon"><i class="fa fa-user"></i></span>
-            <input type="text" name="firstname" id="name" class="input1" placeholder="Firstname">
-        </div>
-        <div>
-            <span class="icon2"><i class="fa fa-user"></i></span>
-            <input type="text" name="lastname" id="lastName" class="input1" placeholder="Lastname"> </br>
-        </div>
-            <span class="icon"><i class="fa fa-user"></i></span>
-            <input type="text" name="username" class="input2" placeholder="Username"> </br>
-
-            <span class="icon"><i class="fa fa-calendar"></i></span>
-            <input type="date" name="birthdate" class="input2" placeholder="Data of birth" style="color: #e5eaf0;">
-            </br>
-
-            <span class="icon"><i class="fa fa-envelope"></i></span>
-            <input type="email" name="email" class="input2" placeholder="Email"> </br>
-
+                <span class="icon"><i class="fa fa-calendar"></i></span>
+                <input type="date" name="birthdate" id="birthdate" class="input2" placeholder="Data of birth"
+                    style="color: #e5eaf0;">
+                </br>
+            </div>
+            <div>
+                <span class="icon"><i class="fa fa-envelope"></i></span>
+                <input type="email" name="email" id="email" class="input2" placeholder="Email"> </br>
+            </div>
+            <div style="display: inline !important;">
             <span class="icon"><i class="fa fa-lock"></i></span>
-            <input type="password" name="password" class="input1" id="password" placeholder="Password">
-
-            <span class="icon2"><i class="fa fa-unlock"></i></span>
-            <input type="password" name="cpassword" class="input1" id="repassword" placeholder="Confirm password"> </br>
-
+            <input type="password" name="password" id="password" class="input1" id="password" placeholder="Password">
+            </div>
+            <div style="display: inline !important;">
+                <span class="icon2"><i class="fa fa-unlock"></i></span>
+                <input type="password" name="cpassword" id="cpassword" class="input1" id="repassword"
+                    placeholder="Confirm password"> </br>
+            </div>
             <input type="submit" name="register-users" id="register_id_button" class="button-register" value="Register">
 
         </form>
@@ -87,14 +92,14 @@
         <script>
             const button = Z("register_id_button");
             button.addEventListener("click", (event) => {
-                GojsaCheckPass("password", "repassword")
                 if (Zv("password") !== Zv("repassword")) {
                     event.preventDefault();
                     Z("errorMessage").textContent = "Password doesn't match"
                 }
             })
-
-            GojsaMessageError("register_id_button","Field mast have soma value","name","lastName")
+            
+            GojsaCheckPass("password", "cpassword")
+            GojsaMessageErrorColor("register_id_button", "Field mast have some value","errorMessage", "name", "lastName", "username",  "password", "birthdate", "email")
         </script>
     </div>
 

@@ -344,7 +344,133 @@ function time_concat(sat, minut, item) {
 
 
 
+////////////////////////////////////////////////////////////////////
 
+
+function GojsaMessageErrorColor() {
+    function removeErrorMessage(arr) {
+        let input;
+        arr.map((k, v) => {
+            input=Z(k);
+            input.addEventListener("keyup", () => {
+                // if (document.querySelector(`.${CSS.escape(k)}_E_G`)) {
+                    // document.querySelector(`.${CSS.escape(k)}_E_G`).style.opacity = "0";
+                    document.getElementById(k).style.borderColor = ""
+                    // document.querySelector(`.${CSS.escape(k)}_E_G`).style.display = "none";
+    
+                // }
+            })
+        })
+    
+    }
+    let arr = [];
+    let arr2 =[];
+    let = Z(arguments[2]).getAttribute("action")
+    const message = arguments[1];
+    const button = Z(arguments[0]);
+    const onClick = button.getAttribute("type");
+    const form = Z(arguments[2]);
+    const messErr =  Z(arguments[2]);
+    form.setAttribute("action","");
+    
+
+    button.setAttribute("type", "")
+    for (var i = 0; i < arguments.length; i++) {
+       
+        if (i > 2) {
+
+            arr.push(arguments[i]);
+            arr2.push(arguments[i]);
+            let errP = Z(arguments[i]);
+
+            button.addEventListener("click", () => {
+                if (errP.value.length === 0) {
+
+                    let att1 = errP.getAttribute("id");
+                    if (arr.includes(att1)) {
+                        null;
+                    } else {
+                        arr.push(att1)
+                        
+                    }
+
+                } else {
+
+                    let att = errP.getAttribute("id")
+                    if (Z(`.${CSS.escape(att)}_E_G`)) {
+                        Z(`.${CSS.escape(att)}_E_G`).style.opacity = "0"
+                        Z(`.${CSS.escape(att)}_E_G`).style.display = "none"
+
+                        Z(att).style.borderColor = ""
+
+                    }
+                    arr = arr.filter(e => e != att)
+
+
+                }
+                errorMess(arr, message)
+
+            })
+
+        }
+        removeErrorMessage(arr2)
+    }
+    button.addEventListener("click", () => {
+        if (arr.length === 0) {
+            eval(onClick)
+        }
+    })
+    function errorMess(arr, message) {
+
+        for (let i = 0; i < arr.length; i++) {
+            let input = Z(arr[i]);
+            if (Z(`.${CSS.escape(arr[i])}_E_G`)) {
+                if (input.value.length > 0) {
+
+                    Z(`.${CSS.escape(arr[i])}_E_G`).style.opacity = "0"
+                    Z(arr[i]).style.borderColor = "";
+                    Z(`.${CSS.escape(arr[i])}_E_G`).style.display = "none"
+
+                } else {
+                    Z(`.${CSS.escape(arr[i])}_E_G`).style.opacity = "1"
+                    Z(`.${CSS.escape(arr[i])}_E_G`).style.display = "block"
+
+                    Z(arr[i]).style.borderColor = "#ff0000";
+
+                }
+            } else {
+                let div = Zc("div");
+                div.classList.add("errorMessage", `${arr[i]}_E_G`);
+                div.style.marginBottom = "-13px";
+                div.style.marginTop = "-3px"
+                // div.style.display = "block"
+                div.style.fontSize = "12px";
+                div.innerText = message;
+                div.style.color = "#ff0000";
+                div.style.transition = "opacity 1s";
+                let polje = Z(arr[i])
+                polje.style.borderColor = "#ff0000";
+                // polje.style.width = "100%";
+                // polje.parentElement.style.display = "block"
+
+
+                if (input.value.length === 0) {
+
+                    // input.parentElement.append(div);
+                    messErr.innerText = message;   
+                }
+            }
+
+
+        }
+    }
+
+    arr = []
+
+
+}
+
+///////////////////////////////////////////////////////////////////
 
 function GojsaMessageError() {
     function removeErrorMessage(arr) {
@@ -441,7 +567,7 @@ function GojsaMessageError() {
                 div.classList.add("errorMessage", `${arr[i]}_E_G`);
                 div.style.marginBottom = "-13px";
                 div.style.marginTop = "-3px"
-                div.style.display = "block"
+                // div.style.display = "block"
                 div.style.fontSize = "12px";
                 div.innerText = message;
                 div.style.color = "#ff0000";
@@ -449,7 +575,7 @@ function GojsaMessageError() {
                 let polje = Z(arr[i])
                 polje.style.borderColor = "#ff0000";
                 // polje.style.width = "100%";
-                polje.parentElement.style.display = "block"
+                // polje.parentElement.style.display = "block"
 
 
                 if (input.value.length === 0) {
