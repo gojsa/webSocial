@@ -1,0 +1,78 @@
+.register{
+    width: 440px;
+    height: 450px;
+    background: rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(7px);
+    margin: auto;
+    border-radius: 10px;
+    box-shadow: rgba(123, 123, 138, 0.25) 0px 13px 27px -5px, rgba(118, 178, 231, 0.3) 0px 8px 16px -8px;
+    margin-top: 15%;
+    
+}
+input.input1{
+    background: transparent;
+    width: 130px;
+    border-radius: 30px;
+    margin: 10px 20px;
+    padding: 10px;
+    outline: none;
+    padding-left: 30px;
+    position: relative;
+    color: #e5eaf0;
+    
+}
+.register i{
+    position: absolute;
+    left: 30px;
+    padding: 20px 5px;
+    color: #d8dbe6;
+}
+
+.icon2{
+    position: absolute;
+    left: 215px;
+    color: #d8dbe6;
+}
+
+
+input.input2{
+    background: transparent;
+    width: 350px;
+    border-radius: 30px;
+    margin: 10px 20px;
+    padding: 10px;
+    outline: none;
+    padding-left: 40px;
+    position: relative;
+    color: #e5eaf0;
+    
+}
+
+.register h1, p, ::placeholder{
+    color: #e5eaf0;
+}
+
+input.button-register{
+    width: 395px;
+    height: 45px;
+    margin: 10px 20px;
+    border-radius: 30px;
+    background: linear-gradient(to right, #2d54d6, #8cb1e2);
+    font-size: 17px;
+    border: none;
+    color: #e5eaf0;
+    box-shadow: 0 0 6px 0 #4162cc;
+    cursor: pointer;
+}
+
+input.input1:hover, input.input2:hover  {
+    border-color:#a7b6e7 ;
+    transition: 0.4s;
+
+}    
+
+input.input1:focus, input.input2:focus{
+    border-color: #4162cc;
+    box-shadow: 0 0 6px 0 #4162cc;
+}
+
