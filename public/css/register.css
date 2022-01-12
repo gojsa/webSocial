@@ -63,6 +63,7 @@ input.button-register{
     color: #e5eaf0;
     box-shadow: 0 0 6px 0 #4162cc;
     cursor: pointer;
+    text-align: center;
 }
 
 input.input1:hover, input.input2:hover  {

@@ -383,9 +383,9 @@ function GojsaMessageErrorColor() {
             arr2.push(arguments[i]);
             let errP = Z(arguments[i]);
 
-            button.addEventListener("click", () => {
+            button.addEventListener("click", (event) => {
                 if (errP.value.length === 0) {
-
+                    event.preventDefault()
                     let att1 = errP.getAttribute("id");
                     if (arr.includes(att1)) {
                         null;
@@ -415,9 +415,10 @@ function GojsaMessageErrorColor() {
         }
         removeErrorMessage(arr2)
     }
-    button.addEventListener("click", () => {
+    button.addEventListener("click", (event) => {
         if (arr.length === 0) {
-            eval(onClick)
+            // eval(onClick)
+            document.forms["registration_form_id"].submit();
         }
     })
     function errorMess(arr, message) {

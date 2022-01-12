@@ -18,31 +18,7 @@ const userRegistration = (username, firstname, lastname, birthdate, gender, emai
       console.log('ne moze')
       res('N')
     }else{
-    //   const query = `
-    // insert into users (
-    //     username,
-    //     first_name,
-    //     last_name,
-    //     birth_date,
-    //     gender,
-    //     email,
-    //     password,
-    //     date_created,
-    //     date_updated
-    //     )
-    //     values(
-    //     '${String(username)}',
-    //     '${String(firstname)}',
-    //     '${String(lastname)}',
-    //      '${birthdate}',
-    //     '${String(gender)}',
-    //     '${String(email)}',
-    //     '${ress}',
-    //     CURDATE(),
-    //     CURDATE()
-    //     )
-        
-    // `;
+    
     const query = `
     call sql11462731.user_registration('${username}', '${firstname}', '${lastname}', '${birthdate}', '${gender}', '${email}', '${ress}');
 

@@ -18,6 +18,7 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.json());
 const { loginAuth,getAllDate } = require('./controllers/login_reg/login');
 const { userRegistration, saveImage } = require('./controllers/login_reg/registration');
+const { redirect } = require("express/lib/response");
 app.get("/", (req, res) => {
     console.log("Pocetna")
     res.render('login_reg/index', { result: '' });
@@ -103,6 +104,8 @@ app.get("/userregistration", (req, res) => {
 app.post('/upload-profile-pic/:id', (req, res) => {
    
     saveImage(req, res)
+    res.redirect("/profile")
+
 });
 // const { init } = require('./config/mysql');
 // const { render } = require("express/lib/response");
