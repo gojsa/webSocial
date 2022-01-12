@@ -12,16 +12,29 @@
     <a href="/logout">Logout</a>
     <img src="" alt="">
       </form>
-    <form method="POST"  enctype="multipart/form-data" id="form_upload_pic_id">
+    <form method="POST"   enctype="multipart/form-data"  id="form_upload_pic_id"> 
         <div>
             <label>Select your profile picture:</label>
             <input type="file" name="profile_pic" />
+            <!-- enctype="multipart/form-data" -->
         </div>
         <div>
             <input type="submit" name="btn_upload_profile_pic" id="upload_img_btn" value="Upload" />
         </div>
     </form> 
-    
+    <form  id="form_post_id"  method="post">
+        <div>
+            <input type="text" placeholder="sometext" id="sometext" name="sometext">
+        </div>
+       
+        </form> 
+    <form id="upload_post_img"  enctype="multipart/form-data" method="post">
+        <div>
+            <input type="file" name="post_image" id="post_image">
+        </div>
+    </form>
+
+    <input type="submit" name="btn_upload_post" id="btn_upload_post_id" value="Upload post" />
     <script src="js/profilejs.js"></script>
 
 </body>

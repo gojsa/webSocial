@@ -107,6 +107,14 @@ app.post('/upload-profile-pic/:id', (req, res) => {
     res.redirect("/profile")
 
 });
+app.post("/uploadpost/:id",(req,res)=>{
+    console.log(req.body.sometext)
+    // console.log(req.params.sometext)
+
+})
+app.post("/uploadpostimg/:id",(req,res)=>{
+    console.log(req.params.id)
+})
 // const { init } = require('./config/mysql');
 // const { render } = require("express/lib/response");
 
