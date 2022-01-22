@@ -12,7 +12,7 @@ const loginAuth = (username,password) => new Promise((res, reject) => {
   });
   const getAllDate = (id) => new Promise((res, reject) => {
    const query = `SELECT i.image,u.username,u.first_name,u.last_name,u.gender,u.birth_date FROM users u JOIN images i 
-   ON u.user_id = i.user_id WHERE i.valid = 'Y' and  u.user_id = ${id}
+   ON u.user_id = i.user_id WHERE i.valid = 'Y' and  u.user_id = ${id} and type = 1
    `;
    db_connection.query(query, (err, results) => {
      if (err) console.error(err);
