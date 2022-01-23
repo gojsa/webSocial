@@ -90,8 +90,17 @@ fetch(`/AllPosts/${id}`).then(function (response) {
     pDiv.appendChild(img)
     let likeButton = document.createElement("button");
     let dislikeButton = document.createElement("button");
-    likeButton.textContent = `Like ${data[i].post_like}`;
-    dislikeButton.textContent = `Dislike ${data[i].post_dislike}`
+    likeButton.setAttribute("id",`${data[i].post_id}_like`)
+    dislikeButton.setAttribute("id",`${data[i].post_id}_dislike`)
+
+    likeButton.textContent = `Like ${data[i].p_like}`;
+    dislikeButton.textContent = `Dislike ${data[i].p_dislike}`
+    likeButton.addEventListener("click",()=>{
+      socket.emit("likePost",data[i].post_id,sessionStorage.getItem("userId"))
+    })
+    dislikeButton.addEventListener("click",()=>{
+      socket.emit("dislikePost",data[i].post_id,sessionStorage.getItem("userId"))
+    })
     let divLD = document.createElement("div");
     divLD.append(likeButton,dislikeButton);
     pDiv.append(divLD)
@@ -101,5 +110,40 @@ fetch(`/AllPosts/${id}`).then(function (response) {
 }).catch(function () {
   console.log("Booo");
 });
+socket.on("showUpdatedLike",(result)=>{
+  
+  let button = document.getElementById(`${result.result[0][0].post_id}_like`);
+  button.textContent = `Like ${result.result[0][0].p_like}`;
+  button.style.backgroundColor = "lightblue"
+})
+socket.on("showUpdatedDislike",(result)=>{
+  
+  let button = document.getElementById(`${result.result[0][0].post_id}_dislike`);
+  button.textContent = `Deslike ${result.result[0][0].p_dislike}`;
+  button.style.backgroundColor = "lightblue"
+})
+socket.emit("getAllDislikedPost",sessionStorage.getItem("userId"));
+socket.emit("getAllLikedPost",sessionStorage.getItem("userId"));
+socket.on("allDislikedPost",(result)=>{
+    
+  for(let i = 0; i < result.result.length; i++){
+      let buttonLike = document.getElementById(`${result.result[i].post_id}_dislike`)
+     
+      if(buttonLike){
 
+        buttonLike.style.backgroundColor = 'lightblue';
+      }
+  }
+})
 
+socket.on("allLikedPost",(result)=>{
+    
+    for(let i = 0; i < result.result.length; i++){
+        let buttonLike = document.getElementById(`${result.result[i].post_id}_like`)
+        
+        if(buttonLike){
+
+          buttonLike.style.backgroundColor = 'lightblue';
+        }
+    }
+})

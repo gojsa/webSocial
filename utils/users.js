@@ -4,7 +4,6 @@ function userJoin(id, user_id) {
 
     users.push(user);
 
-console.log(users)
     return user;
 }
 function userLeave(id){

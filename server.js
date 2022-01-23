@@ -19,7 +19,7 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.json());
 const { loginAuth, getAllDate } = require('./controllers/login_reg/login');
 const { userRegistration, saveImage } = require('./controllers/login_reg/registration');
-const { saveImagePost, postText, getAllPosts, addFreind, checkTypeUser } = require('./controllers/profile');
+const { saveImagePost, postText, getAllPosts, addFreind, checkTypeUser, likeDislike,getLikedPost,getDislikedPost,dislike } = require('./controllers/profile');
 const { userJoin, userLeave, getUser } = require('./utils/users');
 
 
@@ -29,18 +29,45 @@ io.on('connection', socket => {
     socket.on("userJoin", (userId) => {
 
         userJoin(socket.id, userId)
-
-
     })
+socket.on("getAllLikedPost",(userId)=>{
+    getLikedPost(userId).then((result=>{
+        let user = getUser(userId)
+        io.to(user[0].id).emit('allLikedPost', {result})
+        
+    }));
+})
+socket.on("getAllDislikedPost",(userId)=>{
+    getDislikedPost(userId).then((result=>{
+        let user = getUser(userId)
+        io.to(user[0].id).emit('allDislikedPost', {result})
+        
+    }));
+})
+    socket.on("likePost", (postId, userId) => {
+        likeDislike(postId, userId).then((result) => {
+
+            socket.emit("showUpdatedLike", { result })
+            
+        })
+    })
+    socket.on("dislikePost", (postId, userId) => {
+        dislike(postId, userId).then((result) => {
+
+            socket.emit("showUpdatedDislike", { result })
+            
+        })
+    })
+
     socket.on("addUser", (userId, friendId) => {
         let user = getUser(friendId)
         addFreind(userId, friendId);
-        
-        if(user.length > 0){
+
+        if (user.length > 0) {
             io.to(user[0].id).emit('FriendRequestSend', friendId)
 
         }
-        
+
 
     })
 

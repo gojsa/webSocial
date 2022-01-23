@@ -69,12 +69,31 @@ const postText = (userId, text) => new Promise((res, reject) => {
 });
 
 const getAllPosts = (userId) => new Promise((res,rejact)=>{
-    const query = `select a.description,b.image,a.date_created,a.post_like,a.post_dislike from posts a inner join images b on a.image_id = b.image_id where a.user_id = ${userId} and b.type = 2 order by a.date_created desc`;
+    const query = `select a.post_id,sql11462731.count_like_dislike(a.post_id, 'L')as p_like,sql11462731.count_like_dislike(a.post_id, 'D')as p_dislike, a.description,b.image,a.date_created from posts a inner join images b on a.image_id = b.image_id where a.user_id = ${userId} and b.type = 2 order by a.date_created desc`;
 
     db_connection.query(query, (err, results) => {
         if (err) console.error(err);
         res(results);
     });
+})
+
+const likeDislike = (postId,userId) => new Promise((res,rejact)=>{
+   
+       const query = `call sql11462731.insert_like_dislike(${postId}, ${userId}, 'L');`
+    
+    db_connection.query(query, (err, results) => {
+        if (err) console.error(err);
+        res(results);
+    });
+})
+const dislike = (postId,userId) => new Promise((res,rejact)=>{
+   
+    const query = `call sql11462731.insert_like_dislike(${postId}, ${userId}, 'N');`
+ 
+ db_connection.query(query, (err, results) => {
+     if (err) console.error(err);
+     res(results);
+ });
 })
 
 const addFreind = (userId,friendId) => new Promise((res,rejact)=>{
@@ -92,5 +111,20 @@ const checkTypeUser = (userId,friendId)=> new Promise((res,rejact)=>{
         // console.log(results)
     });
 })
-
-module.exports = { saveImagePost,postText,getAllPosts,addFreind,checkTypeUser };
+const getLikedPost = (userId) => new Promise ((res,rejact)=>{
+    const query = `select post_id from posts_meta where user_id = ${userId} and p_like = 'Y'`;
+    db_connection.query(query, (err, results) => {
+        if (err) console.error(err);
+        res(results);
+        
+    });
+})
+const getDislikedPost = (userId) => new Promise ((res,rejact)=>{
+    const query = `select post_id from posts_meta where user_id = ${userId} and p_dislike = 'Y'`;
+    db_connection.query(query, (err, results) => {
+        if (err) console.error(err);
+        res(results);
+        
+    });
+})
+module.exports = { saveImagePost,postText,getAllPosts,addFreind,checkTypeUser,likeDislike,getLikedPost,getDislikedPost,dislike };
