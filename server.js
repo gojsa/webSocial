@@ -19,7 +19,7 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.json());
 const { loginAuth, getAllDate } = require('./controllers/login_reg/login');
 const { userRegistration, saveImage } = require('./controllers/login_reg/registration');
-const { saveImagePost, postText, getAllPosts, addFreind, checkTypeUser, likeDislike,getLikedPost,getDislikedPost,dislike } = require('./controllers/profile');
+const { saveImagePost, postText, getAllPosts, addFreind, checkTypeUser, likeDislike,getLikedPost,getDislikedPost,dislike,insertComment,getAllComents } = require('./controllers/profile');
 const { userJoin, userLeave, getUser } = require('./utils/users');
 
 
@@ -30,6 +30,16 @@ io.on('connection', socket => {
 
         userJoin(socket.id, userId)
     })
+
+socket.on("addComent",(postId,userId,comment)=>{
+    insertComment(postId,userId,comment);
+
+})
+socket.on("getAllComentsForPost",(postId)=>{
+    getAllComents(postId).then((result)=>{
+        socket.emit("showComment",{result})
+    });
+})
 socket.on("getAllLikedPost",(userId)=>{
     getLikedPost(userId).then((result=>{
         let user = getUser(userId)

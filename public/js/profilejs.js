@@ -1,3 +1,5 @@
+// const res = require("express/lib/response");
+
 async function postData(url = '', data = {}) {
   // Default options are marked with *
   const response = await fetch(url, {
@@ -27,6 +29,12 @@ fetch(`/allDate/${id}`).then(function (response) {
 
   const profileImage = document.getElementById("profile_image_id");
   profileImage.setAttribute("src", 'http://' + allData[0].image)
+  const firstName = document.getElementById("first_name_id");
+  const lastName = document.getElementById("last_name_id");
+  firstName.innerText = 'Name: '+ allData[0].first_name;
+  lastName.innerText = 'Last name: '+ allData[0].last_name;
+
+
 }).catch(function () {
   console.log("Booo");
 });
@@ -51,16 +59,21 @@ if(id != sessionStorage.getItem("userId")){
   button.setAttribute("id","add_friend_id")
   divAddFriendButton.appendChild(button)
   
+  document.getElementById("form_upload_pic_id").style.display = 'none';
+
   socket.emit("checkTypeUser",sessionStorage.getItem("userId"),id)
   socket.on("userType",(result)=>{
-    console.log(result.result[0].valid)
+    console.log(result)
     
-    if(result.result[0].valid === 'N'){
+    if(result.result[0].valid === 'REQUEST SENT'){
       document.getElementById("add_friend_id").textContent = "Request sent"
       
-    }else if(result.result[0].valid === 'Y'){
+    }else if(result.result[0].valid === 'ACTIVE'){
       document.getElementById("add_friend_id").textContent = "Friends"
 
+    }else if(result.result[0].valid === 'PANDING REQUEST'){
+      document.getElementById("add_friend_id").textContent = "Accept?"
+      //Logika za prihvatanje i odbijanje zahtjeva za prijateljstvo
     }
     else{
       button.addEventListener("click",()=>{
@@ -101,11 +114,40 @@ fetch(`/AllPosts/${id}`).then(function (response) {
     dislikeButton.addEventListener("click",()=>{
       socket.emit("dislikePost",data[i].post_id,sessionStorage.getItem("userId"))
     })
+    //comment
+    let divComment = document.createElement("div");
+    divComment.setAttribute("id",`${data[i].post_id}_comments`)
+    divComment.textContent = "See comments..."
+    divComment.style.cursor = 'pointer'
+    let inputComment = document.createElement("input");
+    inputComment.setAttribute("placeholder","Add comment...")
+    inputComment.style.display = 'block'
+    let buttonComment = document.createElement("button");
+    buttonComment.textContent = "Add comment"
+
+    buttonComment.addEventListener("click",()=>{
+      let value = inputComment.value;
+      socket.emit("addComent",data[i].post_id,sessionStorage.getItem("userId"),value)
+    })
+
+    let divInnerComment = document.createElement("div");
+    divInnerComment.setAttribute("id",`${data[i].post_id}_inner_comments`);
+    divInnerComment.append(inputComment,buttonComment)
+    divInnerComment.style.display = "none"
+    divComment.append(divInnerComment)
+
+    
+///////////////
     let divLD = document.createElement("div");
-    divLD.append(likeButton,dislikeButton);
+    divLD.append(likeButton,dislikeButton,divComment);
     pDiv.append(divLD)
-    // postText.appendChild(img)
+   
     div.append(pDiv)
+
+    document.getElementById(`${data[i].post_id}_comments`).addEventListener("click",()=>{
+      document.getElementById(`${data[i].post_id}_inner_comments`).style.display = "block";
+      socket.emit("getAllComentsForPost",data[i].post_id);
+    })
   }
 }).catch(function () {
   console.log("Booo");
@@ -146,4 +188,15 @@ socket.on("allLikedPost",(result)=>{
           buttonLike.style.backgroundColor = 'lightblue';
         }
     }
+})
+
+socket.on("showComment",(result)=>{
+  console.log(result)
+  for(let i = 0; i < result.result.length; i++){
+    console.log(result.result[i].post_id)
+    let p = document.createElement("p");
+    p.setAttribute("id",`${result.result[i].post_meta_id}_comment` )
+    p.textContent = result.result[i].comment
+    document.getElementById(`${result.result[i].post_id}_inner_comments`).append(p)
+  }
 })

@@ -37,8 +37,8 @@ function saveImagePost(req, res) {
             return res.send(err);
         }
 
-        imageUpload(imgName, userId).then(()=>{
-        postText(req.params.id,req.params.sometext)
+        imageUpload(imgName, userId).then(() => {
+            postText(req.params.id, req.params.sometext)
 
         })
         // console.log(req.file.path)
@@ -68,7 +68,7 @@ const postText = (userId, text) => new Promise((res, reject) => {
     });
 });
 
-const getAllPosts = (userId) => new Promise((res,rejact)=>{
+const getAllPosts = (userId) => new Promise((res, rejact) => {
     const query = `select a.post_id,sql11462731.count_like_dislike(a.post_id, 'L')as p_like,sql11462731.count_like_dislike(a.post_id, 'D')as p_dislike, a.description,b.image,a.date_created from posts a inner join images b on a.image_id = b.image_id where a.user_id = ${userId} and b.status_id = 2 order by a.date_created desc`;
 
     db_connection.query(query, (err, results) => {
@@ -77,33 +77,33 @@ const getAllPosts = (userId) => new Promise((res,rejact)=>{
     });
 })
 
-const likeDislike = (postId,userId) => new Promise((res,rejact)=>{
-   
-       const query = `call sql11462731.insert_like_dislike(${postId}, ${userId}, 'L');`
-    
+const likeDislike = (postId, userId) => new Promise((res, rejact) => {
+
+    const query = `call sql11462731.insert_like_dislike(${postId}, ${userId}, 'L');`
+
     db_connection.query(query, (err, results) => {
         if (err) console.error(err);
         res(results);
     });
 })
-const dislike = (postId,userId) => new Promise((res,rejact)=>{
-   
+const dislike = (postId, userId) => new Promise((res, rejact) => {
+
     const query = `call sql11462731.insert_like_dislike(${postId}, ${userId}, 'N');`
- 
- db_connection.query(query, (err, results) => {
-     if (err) console.error(err);
-     res(results);
- });
+
+    db_connection.query(query, (err, results) => {
+        if (err) console.error(err);
+        res(results);
+    });
 })
 
-const addFreind = (userId,friendId) => new Promise((res,rejact)=>{
+const addFreind = (userId, friendId) => new Promise((res, rejact) => {
     const query = `call sql11462731.add_friend(${userId}, ${friendId});`;
     db_connection.query(query, (err, results) => {
         if (err) console.error(err);
         res(results);
     });
 })
-const checkTypeUser = (userId,friendId)=> new Promise((res,rejact)=>{
+const checkTypeUser = (userId, friendId) => new Promise((res, rejact) => {
     const query = ` select sql11462731.checkTypeUser(${userId}, ${friendId}) as valid`;
     db_connection.query(query, (err, results) => {
         if (err) console.error(err);
@@ -111,20 +111,37 @@ const checkTypeUser = (userId,friendId)=> new Promise((res,rejact)=>{
         // console.log(results)
     });
 })
-const getLikedPost = (userId) => new Promise ((res,rejact)=>{
+const getLikedPost = (userId) => new Promise((res, rejact) => {
     const query = `select post_id from posts_meta where user_id = ${userId} and p_like = 'Y'`;
     db_connection.query(query, (err, results) => {
         if (err) console.error(err);
         res(results);
-        
+
     });
 })
-const getDislikedPost = (userId) => new Promise ((res,rejact)=>{
+const getDislikedPost = (userId) => new Promise((res, rejact) => {
     const query = `select post_id from posts_meta where user_id = ${userId} and p_dislike = 'Y'`;
     db_connection.query(query, (err, results) => {
         if (err) console.error(err);
         res(results);
-        
+
     });
 })
-module.exports = { saveImagePost,postText,getAllPosts,addFreind,checkTypeUser,likeDislike,getLikedPost,getDislikedPost,dislike };
+const insertComment = (postId, userId, comment) => new Promise((res, rejact) => {
+    const query = ` call sql11462731.insert_comment_post(${postId}, ${userId},'${comment}')`;
+    db_connection.query(query, (err, results) => {
+        if (err) console.error(err);
+        res(results);
+
+    });
+})
+const getAllComents = (postId) => new Promise((res, rejact) => {
+    const query = `select * from posts_meta where post_id = ${postId} and comment is not null order by date_created desc `
+    db_connection.query(query, (err, results) => {
+        if (err) console.error(err);
+        res(results);
+
+    });
+})
+
+module.exports = { saveImagePost, postText, getAllPosts, addFreind, checkTypeUser, likeDislike, getLikedPost, getDislikedPost, dislike, insertComment,getAllComents };
