@@ -136,7 +136,9 @@ const insertComment = (postId, userId, comment) => new Promise((res, rejact) => 
     });
 })
 const getAllComents = (postId) => new Promise((res, rejact) => {
-    const query = `select * from posts_meta where post_id = ${postId} and comment is not null order by date_created desc `
+    const query = `select a.comment,a.post_id,b.first_name,b.last_name from posts_meta a  
+    join users b on a.user_id = b.user_id where post_id = ${postId} and comment is not null
+    `
     db_connection.query(query, (err, results) => {
         if (err) console.error(err);
         res(results);

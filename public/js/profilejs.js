@@ -191,12 +191,14 @@ socket.on("allLikedPost",(result)=>{
 })
 
 socket.on("showComment",(result)=>{
-  console.log(result)
+  
   for(let i = 0; i < result.result.length; i++){
-    console.log(result.result[i].post_id)
+    
     let p = document.createElement("p");
+    let pUser = document.createElement("p");
+    pUser.textContent = result.result[i].first_name + ' '+ result.result[i].last_name;
     p.setAttribute("id",`${result.result[i].post_meta_id}_comment` )
     p.textContent = result.result[i].comment
-    document.getElementById(`${result.result[i].post_id}_inner_comments`).append(p)
+    document.getElementById(`${result.result[i].post_id}_inner_comments`).append(pUser,p)
   }
 })
