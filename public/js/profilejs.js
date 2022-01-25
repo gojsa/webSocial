@@ -1,5 +1,6 @@
 // const res = require("express/lib/response");
-
+let allData;
+let logedUserInfo = JSON.parse(sessionStorage.getItem("logedUser"));
 async function postData(url = '', data = {}) {
   // Default options are marked with *
   const response = await fetch(url, {
@@ -25,7 +26,7 @@ fetch(`/allDate/${id}`).then(function (response) {
 }).then(function (data) {
   sessionStorage.setItem("allData", JSON.stringify(data))
   console.log(data)
-  let allData = JSON.parse(sessionStorage.getItem("allData"))
+   allData = JSON.parse(sessionStorage.getItem("allData"))
 
   const profileImage = document.getElementById("profile_image_id");
   profileImage.setAttribute("src", 'http://' + allData[0].image)
@@ -85,7 +86,7 @@ if(id != sessionStorage.getItem("userId")){
   })
 }
 
-fetch(`/AllPosts/${id}`).then(function (response) {
+fetch(`/AllPosts/${id}/${sessionStorage.getItem("userId")}`).then(function (response) {
   return response.json();
 }).then(function (data) {
   console.log(data)
@@ -117,8 +118,11 @@ fetch(`/AllPosts/${id}`).then(function (response) {
     //comment
     let divComment = document.createElement("div");
     divComment.setAttribute("id",`${data[i].post_id}_comments`)
-    divComment.textContent = "See comments..."
-    divComment.style.cursor = 'pointer'
+    divComment.textContent = "Comments"
+    
+    let buttonOpenComm = document.createElement("button");
+    buttonOpenComm.setAttribute("id",`${data[i].post_id}_button_comments`)
+    buttonOpenComm.textContent = "See all comments"
     let inputComment = document.createElement("input");
     inputComment.setAttribute("placeholder","Add comment...")
     inputComment.style.display = 'block'
@@ -127,14 +131,15 @@ fetch(`/AllPosts/${id}`).then(function (response) {
 
     buttonComment.addEventListener("click",()=>{
       let value = inputComment.value;
-      socket.emit("addComent",data[i].post_id,sessionStorage.getItem("userId"),value)
+      socket.emit("addComent",data[i].post_id,sessionStorage.getItem("userId"),value,logedUserInfo[0].first_name,logedUserInfo[0].last_name)
+      //////////////////////////
     })
 
     let divInnerComment = document.createElement("div");
     divInnerComment.setAttribute("id",`${data[i].post_id}_inner_comments`);
     divInnerComment.append(inputComment,buttonComment)
     divInnerComment.style.display = "none"
-    divComment.append(divInnerComment)
+    divComment.append(buttonOpenComm,divInnerComment)
 
     
 ///////////////
@@ -144,7 +149,7 @@ fetch(`/AllPosts/${id}`).then(function (response) {
    
     div.append(pDiv)
 
-    document.getElementById(`${data[i].post_id}_comments`).addEventListener("click",()=>{
+    document.getElementById(`${data[i].post_id}_button_comments`).addEventListener("click",()=>{
       document.getElementById(`${data[i].post_id}_inner_comments`).style.display = "block";
       socket.emit("getAllComentsForPost",data[i].post_id);
     })
@@ -199,6 +204,17 @@ socket.on("showComment",(result)=>{
     pUser.textContent = result.result[i].first_name + ' '+ result.result[i].last_name;
     p.setAttribute("id",`${result.result[i].post_meta_id}_comment` )
     p.textContent = result.result[i].comment
+    pUser.style.fontWeight = "bold"
     document.getElementById(`${result.result[i].post_id}_inner_comments`).append(pUser,p)
   }
+})
+
+socket.on("showInsertComment",(comment,postId,firstName,lastName)=>{
+  let p = document.createElement("p");
+  let pUser = document.createElement("p");
+  pUser.textContent = firstName + ' '+ lastName;
+  p.setAttribute("id",`${postId}_comment` )
+  p.textContent = comment
+  pUser.style.fontWeight = "bold"
+  document.getElementById(`${postId}_inner_comments`).append(pUser,p)
 })

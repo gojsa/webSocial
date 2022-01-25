@@ -68,13 +68,45 @@ const postText = (userId, text) => new Promise((res, reject) => {
     });
 });
 
-const getAllPosts = (userId) => new Promise((res, rejact) => {
-    const query = `select a.post_id,sql11462731.count_like_dislike(a.post_id, 'L')as p_like,sql11462731.count_like_dislike(a.post_id, 'D')as p_dislike, a.description,b.image,a.date_created from posts a inner join images b on a.image_id = b.image_id where a.user_id = ${userId} and b.status_id = 2 order by a.date_created desc`;
+const getAllPosts = (userId, friendId) => new Promise((res, rejact) => {
 
-    db_connection.query(query, (err, results) => {
-        if (err) console.error(err);
-        res(results);
-    });
+    if (userId === friendId) {
+        const query = `select a.post_id,sql11462731.count_like_dislike(a.post_id, 'L')as p_like,sql11462731.count_like_dislike(a.post_id, 'D')as p_dislike, a.description,b.image,a.date_created from posts a inner join images b on a.image_id = b.image_id where a.user_id = ${userId} and b.status_id = 2 order by a.date_created desc`;
+
+        db_connection.query(query, (err, results) => {
+            if (err) console.error(err);
+            res(results);
+
+        });
+    } else {
+
+
+        const quertCheck = `
+    select * from user_group_members where group_id = (
+        select user_group_id from user_groups where user_id = ${userId}
+        ) and user_id = ${friendId} and status_id = (
+        select status_id from statuses where name='ACTIVE' and type_id = (
+        select type_id from types where name = 'FRIENDS'
+        )
+        )
+    `
+
+
+        db_connection.query(quertCheck, (err, results) => {
+            if (err) console.error(err);
+            // res(results);
+
+            if (results.length > 0) {
+                const query = `select a.post_id,sql11462731.count_like_dislike(a.post_id, 'L')as p_like,sql11462731.count_like_dislike(a.post_id, 'D')as p_dislike, a.description,b.image,a.date_created from posts a inner join images b on a.image_id = b.image_id where a.user_id = ${userId} and b.status_id = 2 order by a.date_created desc`;
+
+                db_connection.query(query, (err, results) => {
+                    if (err) console.error(err);
+                    res(results);
+
+                });
+            }
+        });
+    }
 })
 
 const likeDislike = (postId, userId) => new Promise((res, rejact) => {
@@ -146,4 +178,4 @@ const getAllComents = (postId) => new Promise((res, rejact) => {
     });
 })
 
-module.exports = { saveImagePost, postText, getAllPosts, addFreind, checkTypeUser, likeDislike, getLikedPost, getDislikedPost, dislike, insertComment,getAllComents };
+module.exports = { saveImagePost, postText, getAllPosts, addFreind, checkTypeUser, likeDislike, getLikedPost, getDislikedPost, dislike, insertComment, getAllComents };

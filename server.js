@@ -31,8 +31,9 @@ io.on('connection', socket => {
         userJoin(socket.id, userId)
     })
 
-socket.on("addComent",(postId,userId,comment)=>{
+socket.on("addComent",(postId,userId,comment,firstName,LastName)=>{
     insertComment(postId,userId,comment);
+    io.emit("showInsertComment",comment,postId,firstName,LastName)
 
 })
 socket.on("getAllComentsForPost",(postId)=>{
@@ -151,8 +152,8 @@ app.get("/allDate/:id", (req, res) => {
         res.json(result)
     })
 })
-app.get("/AllPosts/:id", (req, res) => {
-    getAllPosts(req.params.id).then((result) => {
+app.get("/AllPosts/:id/:logedId", (req, res) => {
+    getAllPosts(req.params.id,req.params.logedId).then((result) => {
         res.json(result);
     })
 })
