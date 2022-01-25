@@ -157,64 +157,64 @@ fetch(`/AllPosts/${id}/${sessionStorage.getItem("userId")}`).then(function (resp
 }).catch(function () {
   console.log("Booo");
 });
-socket.on("showUpdatedLike",(result)=>{
+// socket.on("showUpdatedLike",(result)=>{
   
-  let button = document.getElementById(`${result.result[0][0].post_id}_like`);
-  button.textContent = `Like ${result.result[0][0].p_like}`;
-  button.style.backgroundColor = "lightblue"
-})
-socket.on("showUpdatedDislike",(result)=>{
+//   let button = document.getElementById(`${result.result[0][0].post_id}_like`);
+//   button.textContent = `Like ${result.result[0][0].p_like}`;
+//   button.style.backgroundColor = "lightblue"
+// })
+// socket.on("showUpdatedDislike",(result)=>{
   
-  let button = document.getElementById(`${result.result[0][0].post_id}_dislike`);
-  button.textContent = `Deslike ${result.result[0][0].p_dislike}`;
-  button.style.backgroundColor = "lightblue"
-})
-socket.emit("getAllDislikedPost",sessionStorage.getItem("userId"));
-socket.emit("getAllLikedPost",sessionStorage.getItem("userId"));
-socket.on("allDislikedPost",(result)=>{
+//   let button = document.getElementById(`${result.result[0][0].post_id}_dislike`);
+//   button.textContent = `Deslike ${result.result[0][0].p_dislike}`;
+//   button.style.backgroundColor = "lightblue"
+// })
+// socket.emit("getAllDislikedPost",sessionStorage.getItem("userId"));
+// socket.emit("getAllLikedPost",sessionStorage.getItem("userId"));
+// socket.on("allDislikedPost",(result)=>{
     
-  for(let i = 0; i < result.result.length; i++){
-      let buttonLike = document.getElementById(`${result.result[i].post_id}_dislike`)
+//   for(let i = 0; i < result.result.length; i++){
+//       let buttonLike = document.getElementById(`${result.result[i].post_id}_dislike`)
      
-      if(buttonLike){
+//       if(buttonLike){
 
-        buttonLike.style.backgroundColor = 'lightblue';
-      }
-  }
-})
+//         buttonLike.style.backgroundColor = 'lightblue';
+//       }
+//   }
+// })
 
-socket.on("allLikedPost",(result)=>{
+// socket.on("allLikedPost",(result)=>{
     
-    for(let i = 0; i < result.result.length; i++){
-        let buttonLike = document.getElementById(`${result.result[i].post_id}_like`)
+//     for(let i = 0; i < result.result.length; i++){
+//         let buttonLike = document.getElementById(`${result.result[i].post_id}_like`)
         
-        if(buttonLike){
+//         if(buttonLike){
 
-          buttonLike.style.backgroundColor = 'lightblue';
-        }
-    }
-})
+//           buttonLike.style.backgroundColor = 'lightblue';
+//         }
+//     }
+// })
 
-socket.on("showComment",(result)=>{
+// socket.on("showComment",(result)=>{
   
-  for(let i = 0; i < result.result.length; i++){
+//   for(let i = 0; i < result.result.length; i++){
     
-    let p = document.createElement("p");
-    let pUser = document.createElement("p");
-    pUser.textContent = result.result[i].first_name + ' '+ result.result[i].last_name;
-    p.setAttribute("id",`${result.result[i].post_meta_id}_comment` )
-    p.textContent = result.result[i].comment
-    pUser.style.fontWeight = "bold"
-    document.getElementById(`${result.result[i].post_id}_inner_comments`).append(pUser,p)
-  }
-})
+//     let p = document.createElement("p");
+//     let pUser = document.createElement("p");
+//     pUser.textContent = result.result[i].first_name + ' '+ result.result[i].last_name;
+//     p.setAttribute("id",`${result.result[i].post_meta_id}_comment` )
+//     p.textContent = result.result[i].comment
+//     pUser.style.fontWeight = "bold"
+//     document.getElementById(`${result.result[i].post_id}_inner_comments`).append(pUser,p)
+//   }
+// })
 
-socket.on("showInsertComment",(comment,postId,firstName,lastName)=>{
-  let p = document.createElement("p");
-  let pUser = document.createElement("p");
-  pUser.textContent = firstName + ' '+ lastName;
-  p.setAttribute("id",`${postId}_comment` )
-  p.textContent = comment
-  pUser.style.fontWeight = "bold"
-  document.getElementById(`${postId}_inner_comments`).append(pUser,p)
-})
+// socket.on("showInsertComment",(comment,postId,firstName,lastName)=>{
+//   let p = document.createElement("p");
+//   let pUser = document.createElement("p");
+//   pUser.textContent = firstName + ' '+ lastName;
+//   p.setAttribute("id",`${postId}_comment` )
+//   p.textContent = comment
+//   pUser.style.fontWeight = "bold"
+//   document.getElementById(`${postId}_inner_comments`).append(pUser,p)
+// })

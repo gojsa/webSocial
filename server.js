@@ -19,7 +19,7 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.json());
 const { loginAuth, getAllDate } = require('./controllers/login_reg/login');
 const { userRegistration, saveImage } = require('./controllers/login_reg/registration');
-const { saveImagePost, postText, getAllPosts, addFreind, checkTypeUser, likeDislike,getLikedPost,getDislikedPost,dislike,insertComment,getAllComents } = require('./controllers/profile');
+const { saveImagePost, postText, getAllPosts, addFreind, checkTypeUser, likeDislike,getLikedPost,getDislikedPost,dislike,insertComment,getAllComents,getPostsFromFriends } = require('./controllers/profile');
 const { userJoin, userLeave, getUser } = require('./utils/users');
 
 
@@ -30,7 +30,11 @@ io.on('connection', socket => {
 
         userJoin(socket.id, userId)
     })
-
+socket.on("getAllPostsFromFriends",(userId)=>{
+    getPostsFromFriends(userId).then((result)=>{
+        socket.emit("showAllPostsFromFriends",{result});
+    })
+})
 socket.on("addComent",(postId,userId,comment,firstName,LastName)=>{
     insertComment(postId,userId,comment);
     io.emit("showInsertComment",comment,postId,firstName,LastName)
@@ -194,16 +198,7 @@ app.post('/upload-profile-pic/:id', (req, res) => {
 
 
 });
-// app.post("/posttext/:id/:sometext", (req, res) => {
-//     // console.log(req.body.sometext)
-//     // console.log(req)
-//     // console.log(req.params.sometext)
-//     // saveImage(req, res)
-//     postText(req.params.id, req.params.sometext)
-//     res.redirect("/profile")
 
-
-// })
 app.post("/uploadpostimg/:id/:sometext", (req, res) => {
     saveImagePost(req, res)
     res.redirect(`/profile?id=${req.params.id}`)

@@ -177,5 +177,28 @@ const getAllComents = (postId) => new Promise((res, rejact) => {
 
     });
 })
+const getPostsFromFriends = (userId) => new Promise((res, rejact) => {
+    const query = `
+    select u.first_name,u.last_name,a.user_id,a.post_id,sql11462731.count_like_dislike(a.post_id, 'L')as p_like,sql11462731.count_like_dislike(a.post_id, 'D')as p_dislike,
+    a.description,b.image,a.date_created from posts a 
+   join images b on a.image_id = b.image_id join users u on a.user_id = u.user_id
+    where b.status_id = 2 and a.user_id in (
+   select user_id from user_group_members where group_id = 
+   (
+   select user_group_id from user_groups where user_id = ${userId}
+   ) and status_id = 
+   (
+   select status_id from statuses where name = 'ACTIVE' and type_id =
+   (
+   select type_id from types where name = 'FRIENDS' 
+   )
+   ) 
+   ) or a.user_id = ${userId} order by date_created desc;
+    `
+    db_connection.query(query, (err, results) => {
+        if (err) console.error(err);
+        res(results);
 
-module.exports = { saveImagePost, postText, getAllPosts, addFreind, checkTypeUser, likeDislike, getLikedPost, getDislikedPost, dislike, insertComment, getAllComents };
+    });
+})
+module.exports = { saveImagePost, postText, getAllPosts, addFreind, checkTypeUser, likeDislike, getLikedPost, getDislikedPost, dislike, insertComment, getAllComents, getPostsFromFriends };
