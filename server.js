@@ -159,7 +159,7 @@ app.get("/allDate/:id", (req, res) => {
 })
 app.get("/AllPosts/:id/:logedId", (req, res) => {
     getAllPosts(req.params.id, req.params.logedId).then((result) => {
-        console.log(result)
+       
         res.json(result);
     })
 })
