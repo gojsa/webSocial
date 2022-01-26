@@ -24,7 +24,7 @@ socket.on("showAllPostsFromFriends", (data) => {
         pNameLastName.textContent = data.result[i].first_name + ' ' + data.result[i].last_name;
         let postText = document.createElement("p");
         postText.innerText = data.result[i].description;
-        pDiv.append(pNameLastName,postText);
+        pDiv.append(pNameLastName, postText);
         pDiv.appendChild(img)
         let likeButton = document.createElement("button");
         let dislikeButton = document.createElement("button");
@@ -140,4 +140,62 @@ socket.on("showInsertComment", (comment, postId, firstName, lastName) => {
     p.textContent = comment
     pUser.style.fontWeight = "bold"
     document.getElementById(`${postId}_inner_comments`).append(pUser, p)
+})
+
+const buttonOpenChat = document.getElementById("openChat");
+buttonOpenChat.addEventListener("click", () => {
+    let primaryDiv = document.getElementById("openchatBoxId")
+    if (document.getElementById("listFriendsBox")) {
+        document.getElementById("listFriendsBox").remove()
+        buttonOpenChat.setAttribute("style",'bottom:5px;top:auto;')
+    } else {
+        const css = `
+    background-color: #e6e4e4;
+    width:200px;
+    height:800px;
+    position:fixed;
+    top:200px;
+    right:0;
+    display:block;
+    box-shadow: -1px 7px 7px black;
+    `
+        const css2 = `
+    top: 177px;
+    bottom: auto;
+    `
+        buttonOpenChat.setAttribute("style", css2)
+        let div = document.createElement("div");
+        div.setAttribute("id", "listFriendsBox")
+        div.setAttribute("style", css);
+        primaryDiv.append(div)
+
+        socket.emit("listOfAllFriendsChat",userID)
+        
+    }
+})
+socket.on("showListOfFriends",(result)=>{
+    console.log(result)
+    let div = document.getElementById("listFriendsBox");
+    for(let i = 0; i < result.result.length;i++){
+        console.log(result.result[i].first_name)
+        let li = document.createElement("p");
+        let img = document.createElement("img")
+        let p = document.createElement("p");
+        p.style.cursor = "pointer"
+        img.setAttribute("src",`http://${result.result[i].image}`)
+        img.style.width = '25px'
+        img.style.verticalAlign = "middle";
+        li.setAttribute("id",`${result.result[i].user_id}`)
+        li.style.display= "inline";
+        li.style.marginLeft = "5px"
+        li.textContent = result.result[i].first_name + ' ' + result.result[i].last_name
+        // let html = `
+        // <p><img src='http://${result.result[i].image}' width='20px' height='20px'>
+        // ${result.result[i].first_name}  ${result.result[i].last_name}
+        // </p>
+        // `
+        p.append(img,li)
+        div.append(p);
+        
+    }
 })

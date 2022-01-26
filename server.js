@@ -21,6 +21,7 @@ const { loginAuth, getAllDate } = require('./controllers/login_reg/login');
 const { userRegistration, saveImage } = require('./controllers/login_reg/registration');
 const { saveImagePost, postText, getAllPosts, addFreind, checkTypeUser, likeDislike, getLikedPost, getDislikedPost, dislike, insertComment, getAllComents, getPostsFromFriends } = require('./controllers/profile');
 const { userJoin, userLeave, getUser } = require('./utils/users');
+const { gitListoFfriends } = require('./controllers/chat');
 
 
 const { redirect } = require("express/lib/response");
@@ -29,6 +30,14 @@ io.on('connection', socket => {
     socket.on("userJoin", (userId) => {
 
         userJoin(socket.id, userId)
+    })
+    socket.on("listOfAllFriendsChat",(userId)=>{
+        gitListoFfriends(userId).then((result)=>{
+            let user = getUser(userId)
+
+            io.to(user[0].id).emit('showListOfFriends', { result })
+            
+        })
     })
     socket.on("getAllPostsFromFriends", (userId) => {
         getPostsFromFriends(userId).then((result) => {
