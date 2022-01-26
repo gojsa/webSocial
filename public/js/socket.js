@@ -5,8 +5,9 @@ socket.on("FriendRequestSend", (friendId) => {
     console.log(friendId)
     // document.getElementById("div_add_friend_button").textContent = "Request sent"
 })
-let userID = sessionStorage.getItem("userId");
-socket.emit("getAllPostsFromFriends", userID)
+let logedUserInfo = JSON.parse(sessionStorage.getItem("logedUser"));
+
+let userID = logedUserInfo[0].user_id;
 
 socket.on("showAllPostsFromFriends", (data) => {
     console.log(data);

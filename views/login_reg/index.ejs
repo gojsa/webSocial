@@ -45,21 +45,22 @@
        <div class="login">
         <!-- <script src="./script.js"></script> -->
       
-    <form action="/login" method="post" id="form_login_id">
+    <form  method="get" id="form_login_id">
         <h1 style="text-align: center;">Login</h1> </br>
 
         <span class="icon"><i class="fa fa-user" style="font-size:24px"></i></span>
-        <input type="text" name="username" class="input1" placeholder="Username" required> </br>
+        <input type="text" id="username" name="username" class="input1" placeholder="Username" required> </br>
 
         <span class="icon"><i class="fa fa-lock" style="font-size:24px"></i></span>
-        <input type="password" name="password" class="input1" placeholder="Password" required> </br>
+        <input type="password" id="password" name="password" class="input1" placeholder="Password" required> </br>
 
-        <input type="submit" name="login-users" class="button-login" value="Login">
+        <input type="submit" id="login_button_id" name="login-users" class="button-login" value="Login">
 
         <p style="text-align: center;">Don't have an account? <a href="http://localhost:4444/userregistration">Register </a></p>
         </form>
         
   </div>
+  <script src="js/login.js"></script>
 
 
     </body>

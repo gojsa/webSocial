@@ -1,6 +1,6 @@
-// const res = require("express/lib/response");
+
 let allData;
-let logedUserInfo = JSON.parse(sessionStorage.getItem("logedUser"));
+// let logedUserInfo = JSON.parse(sessionStorage.getItem("logedUser"));
 async function postData(url = '', data = {}) {
   // Default options are marked with *
   const response = await fetch(url, {
@@ -176,7 +176,7 @@ fetch(`/AllPosts/${id}/${sessionStorage.getItem("userId")}`).then(function (resp
 //   for(let i = 0; i < result.result.length; i++){
 //       let buttonLike = document.getElementById(`${result.result[i].post_id}_dislike`)
      
-//       if(buttonLike){
+//       if(buttonLike){ 
 
 //         buttonLike.style.backgroundColor = 'lightblue';
 //       }

@@ -69,6 +69,8 @@ const postText = (userId, text) => new Promise((res, reject) => {
 });
 
 const getAllPosts = (userId, friendId) => new Promise((res, rejact) => {
+console.log(userId)
+console.log(friendId)
 
     if (userId === friendId) {
         const query = `select a.post_id,sql11462731.count_like_dislike(a.post_id, 'L')as p_like,sql11462731.count_like_dislike(a.post_id, 'D')as p_dislike, a.description,b.image,a.date_created from posts a inner join images b on a.image_id = b.image_id where a.user_id = ${userId} and b.status_id = 2 order by a.date_created desc`;

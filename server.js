@@ -19,7 +19,7 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.json());
 const { loginAuth, getAllDate } = require('./controllers/login_reg/login');
 const { userRegistration, saveImage } = require('./controllers/login_reg/registration');
-const { saveImagePost, postText, getAllPosts, addFreind, checkTypeUser, likeDislike,getLikedPost,getDislikedPost,dislike,insertComment,getAllComents,getPostsFromFriends } = require('./controllers/profile');
+const { saveImagePost, postText, getAllPosts, addFreind, checkTypeUser, likeDislike, getLikedPost, getDislikedPost, dislike, insertComment, getAllComents, getPostsFromFriends } = require('./controllers/profile');
 const { userJoin, userLeave, getUser } = require('./utils/users');
 
 
@@ -30,47 +30,47 @@ io.on('connection', socket => {
 
         userJoin(socket.id, userId)
     })
-socket.on("getAllPostsFromFriends",(userId)=>{
-    getPostsFromFriends(userId).then((result)=>{
-        socket.emit("showAllPostsFromFriends",{result});
+    socket.on("getAllPostsFromFriends", (userId) => {
+        getPostsFromFriends(userId).then((result) => {
+            socket.emit("showAllPostsFromFriends", { result });
+        })
     })
-})
-socket.on("addComent",(postId,userId,comment,firstName,LastName)=>{
-    insertComment(postId,userId,comment);
-    io.emit("showInsertComment",comment,postId,firstName,LastName)
+    socket.on("addComent", (postId, userId, comment, firstName, LastName) => {
+        insertComment(postId, userId, comment);
+        io.emit("showInsertComment", comment, postId, firstName, LastName)
 
-})
-socket.on("getAllComentsForPost",(postId)=>{
-    getAllComents(postId).then((result)=>{
-        socket.emit("showComment",{result})
-    });
-})
-socket.on("getAllLikedPost",(userId)=>{
-    getLikedPost(userId).then((result=>{
-        let user = getUser(userId)
-        io.to(user[0].id).emit('allLikedPost', {result})
-        
-    }));
-})
-socket.on("getAllDislikedPost",(userId)=>{
-    getDislikedPost(userId).then((result=>{
-        let user = getUser(userId)
-        io.to(user[0].id).emit('allDislikedPost', {result})
-        
-    }));
-})
+    })
+    socket.on("getAllComentsForPost", (postId) => {
+        getAllComents(postId).then((result) => {
+            socket.emit("showComment", { result })
+        });
+    })
+    socket.on("getAllLikedPost", (userId) => {
+        getLikedPost(userId).then((result => {
+            let user = getUser(userId)
+            io.to(user[0].id).emit('allLikedPost', { result })
+
+        }));
+    })
+    socket.on("getAllDislikedPost", (userId) => {
+        getDislikedPost(userId).then((result => {
+            let user = getUser(userId)
+            io.to(user[0].id).emit('allDislikedPost', { result })
+
+        }));
+    })
     socket.on("likePost", (postId, userId) => {
         likeDislike(postId, userId).then((result) => {
 
             socket.emit("showUpdatedLike", { result })
-            
+
         })
     })
     socket.on("dislikePost", (postId, userId) => {
         dislike(postId, userId).then((result) => {
 
             socket.emit("showUpdatedDislike", { result })
-            
+
         })
     })
 
@@ -108,16 +108,17 @@ app.get("/", (req, res) => {
     // console.log("Pocetna")
     res.render('login_reg/index', { result: '' });
 })
-app.post("/login", async (req, res) => {
-    const username = req.body.username;
-    const password = req.body.password;
+app.get("/login/:username/:password", async (req, res) => {
+    const username = req.params.username;
+    const password = req.params.password;
 
     loginAuth(username, password)
         .then(users => {
             if (users.length === 1) {
-
                 req.session.loggedin = true;
-                res.status(301).redirect(`/home?id=${users[0].user_id}`)
+                res.json(users)
+
+                // res.status(301).redirect(`/home?id=${users[0].user_id}`)
 
             }
             else {
@@ -157,7 +158,8 @@ app.get("/allDate/:id", (req, res) => {
     })
 })
 app.get("/AllPosts/:id/:logedId", (req, res) => {
-    getAllPosts(req.params.id,req.params.logedId).then((result) => {
+    getAllPosts(req.params.id, req.params.logedId).then((result) => {
+        console.log(result)
         res.json(result);
     })
 })
@@ -207,6 +209,8 @@ app.post("/uploadpostimg/:id/:sometext", (req, res) => {
 
 
 })
+
+
 // const { init } = require('./config/mysql');
 // const { render } = require("express/lib/response");
 

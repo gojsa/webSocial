@@ -1,0 +1,2 @@
+
+socket.emit("getAllPostsFromFriends", userID)
