@@ -22,20 +22,39 @@ const { userRegistration, saveImage } = require('./controllers/login_reg/registr
 const { saveImagePost, postText, getAllPosts, addFreind, checkTypeUser, likeDislike, getLikedPost, getDislikedPost, dislike, insertComment, getAllComents, getPostsFromFriends } = require('./controllers/profile');
 const { userJoin, userLeave, getUser } = require('./utils/users');
 const { messages } = require('./utils/messages');
-const { gitListoFfriends } = require('./controllers/chat');
+const { gitListoFfriends,insertMessage, updateMessage } = require('./controllers/chat');
 
 
-const { redirect } = require("express/lib/response");
+// const { redirect } = require("express/lib/response");
 
 io.on('connection', socket => {
     socket.on("userJoin", (userId) => {
 
         userJoin(socket.id, userId)
+
+        socket.emit("telAllthahtYouOnline",userId)
+    })
+
+    socket.on("AllFriendsArray",(userId,friendId)=>{
+        gitListoFfriends(userId).then((result)=>{
+            // let user = getUser(userId)
+
+            io.emit('listOfAllFriendsArray', { result },friendId)
+            
+        })
+    })
+    socket.on("updateMessage",(myId,senderId)=>{
+        updateMessage(myId,senderId)
     })
     socket.on("sendMessage",(userId,friendId,message,username)=>{
         const user =  getUser(friendId)
         if(user.length > 0){
             io.to(user[0].id).emit("showMessage",messages(message,username))
+            insertMessage(message, userId, friendId, 'Y')
+
+        }else{
+            insertMessage(message, userId, friendId, 'N')
+
         }
     })
     socket.on("listOfAllFriendsChat",(userId)=>{

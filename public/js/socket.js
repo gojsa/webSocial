@@ -8,6 +8,10 @@ socket.on("FriendRequestSend", (friendId) => {
 let logedUserInfo = JSON.parse(sessionStorage.getItem("logedUser"));
 
 let userID = logedUserInfo[0].user_id;
+let AllFriends;
+
+
+
 
 socket.on("showAllPostsFromFriends", (data) => {
     console.log(data);
@@ -175,7 +179,7 @@ buttonOpenChat.addEventListener("click", () => {
     }
 })
 socket.on("showListOfFriends", (result) => {
-    console.log(result)
+   
     let div = document.getElementById("listFriendsBox");
     for (let i = 0; i < result.result.length; i++) {
         console.log(result.result[i].first_name)
@@ -200,7 +204,9 @@ socket.on("showListOfFriends", (result) => {
             position:fixed;
             bottom: -15px;
             right: 257px;
+           
             text-align: center;
+            
             
             `
             const cssChat =
@@ -210,9 +216,11 @@ socket.on("showListOfFriends", (result) => {
             position: fixed;
             bottom: 40px;
             right:257px;
+           
             height:400px;
             border-color: black;
             border: 1px solid;
+            
             
             `
             const cssInputChat =
@@ -222,9 +230,11 @@ socket.on("showListOfFriends", (result) => {
             position: fixed;
             bottom: 26px;
             right:303px;
+           
             height:25px;
             border-color: black;
             border: 1px solid;
+            display:inline;
             `;
             const cssButtonChat =
                 `
@@ -233,7 +243,8 @@ socket.on("showListOfFriends", (result) => {
             bottom: 26px;
             height: 29px;
             right:257px;
-            displat: inline;
+        
+            
             `;
             if (document.getElementById("chatOpen_id")) {
                 document.getElementById("chatOpen_id").remove()
@@ -255,17 +266,26 @@ socket.on("showListOfFriends", (result) => {
             let buttonChat = document.createElement("button");
             buttonChat.setAttribute("style", cssButtonChat);
             buttonChat.innerText = "Send"
-
+            inputChat.addEventListener("click",()=>{
+                socket.emit("updateMessage",userID,result.result[i].user_id)
+            })
             buttonChat.addEventListener("click", () => {
                 const pMessageStyle =
                     `
                 width:50%;
                 word-wrap: break-word;
                 `;
+                const divStyle =
+                    `
+                width: 50%;
+                right: 0;
+                position: absolute;
+                display:block;
+                `
                 socket.emit("sendMessage", userID, result.result[i].user_id, inputChat.value, logedUserInfo[0].first_name);
-                
 
-                let message = messages(inputChat.value,logedUserInfo[0].first_name)
+
+                let message = messages(inputChat.value, logedUserInfo[0].first_name)
                 let pMessage = document.createElement("p");
                 pMessage.setAttribute("style", pMessageStyle)
                 pMessage.innerText = message.message;
@@ -274,14 +294,20 @@ socket.on("showListOfFriends", (result) => {
                 let pUsername = document.createElement("p");
                 pUsername.innerText = message.username;
                 let div = document.createElement("div");
+                div.setAttribute("style", divStyle)
                 div.append(pUsername, pTime, pMessage)
                 pChat.append(div)
+                inputChat.value = '';
+                inputChat.focus()
+
             })
 
 
 
-
-            openChatId.append(pChat, inputChat, buttonChat, pName);
+            let divAll = document.createElement("div")
+            divAll.style.display = "inline"
+            divAll.append(pChat, inputChat, buttonChat, pName);
+            openChatId.append(divAll);
 
         })
         p.append(img, li)
@@ -298,6 +324,12 @@ socket.on("showMessage", (message) => {
                 width:50%;
                 word-wrap: break-word;
                 `;
+    const divStyle =
+        `
+                width: 50%;
+               
+                display:block;
+                `
     let pMessage = document.createElement("p");
     pMessage.setAttribute("style", pMessageStyle)
     pMessage.innerText = message.message;
@@ -306,6 +338,7 @@ socket.on("showMessage", (message) => {
     let pUsername = document.createElement("p");
     pUsername.innerText = message.username;
     let div = document.createElement("div");
+    div.setAttribute("style", divStyle)
     div.append(pUsername, pTime, pMessage)
     pChat.append(div)
 })
@@ -319,3 +352,13 @@ function messages(message, username) {
     }
     return returnMessage;
 }
+
+socket.on("telAllthahtYouOnline",(friendId)=>{
+    // for(let i = 0 ; i < AllFriends.length)
+    // console.log(AllFriends)
+    socket.emit("AllFriendsArray",userID,friendId)
+})
+socket.on("listOfAllFriendsArray",(result,id)=>{
+   console.log(id)
+    console.log(result)
+})

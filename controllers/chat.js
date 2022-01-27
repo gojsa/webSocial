@@ -14,8 +14,26 @@ select user_group_id from user_groups where user_id = ${userId}
     db_connection.query(query, (err, results) => {
         if (err) console.error(err);
         res(results);
-       
+
+    });
+})
+const insertMessage = (message, senderId, reveiverId, read) => new Promise((res, rejact) => {
+    const query = `call sql11462731.insert_messages(${senderId}, ${reveiverId},'${message}','${read}');`
+
+    db_connection.query(query, (err, results) => {
+        if (err) console.error(err);
+        res(results);
+
+    });
+})
+const updateMessage = (myId, senderId) => new Promise((res, rejact) => {
+    const query = `update messages set p_read = 'Y' where receiver_id = ${myId} and sender_id = ${senderId}`;
+
+    db_connection.query(query, (err, results) => {
+        if (err) console.error(err);
+        res(results);
+
     });
 })
 
-module.exports = { gitListoFfriends };
+module.exports = { gitListoFfriends, insertMessage, updateMessage };
