@@ -16,10 +16,14 @@ function userLeave(id){
 function getUser(id){
     return users.filter(user => user.user_id === String(id));
 }
-
+function getOnlineUsers(){
+     return users
+    // console.log(users)
+}
 module.exports = {
     userJoin,
     userLeave,
-    getUser
+    getUser,
+    getOnlineUsers
     
 }

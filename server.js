@@ -20,7 +20,7 @@ app.use(bodyParser.json());
 const { loginAuth, getAllDate } = require('./controllers/login_reg/login');
 const { userRegistration, saveImage } = require('./controllers/login_reg/registration');
 const { saveImagePost, postText, getAllPosts, addFreind, checkTypeUser, likeDislike, getLikedPost, getDislikedPost, dislike, insertComment, getAllComents, getPostsFromFriends } = require('./controllers/profile');
-const { userJoin, userLeave, getUser } = require('./utils/users');
+const { userJoin, userLeave, getUser,getOnlineUsers } = require('./utils/users');
 const { messages } = require('./utils/messages');
 const { gitListoFfriends,insertMessage, updateMessage } = require('./controllers/chat');
 
@@ -32,7 +32,7 @@ io.on('connection', socket => {
 
         userJoin(socket.id, userId)
 
-        socket.emit("telAllthahtYouOnline",userId)
+        socket.emit("telAllthahtYouOnline",userId,getOnlineUsers())
     })
 
     socket.on("AllFriendsArray",(userId,friendId)=>{

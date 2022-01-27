@@ -352,13 +352,14 @@ function messages(message, username) {
     }
     return returnMessage;
 }
-
-socket.on("telAllthahtYouOnline",(friendId)=>{
+let allOnlineUsers;
+socket.on("telAllthahtYouOnline",(friendId,allUsers)=>{
     // for(let i = 0 ; i < AllFriends.length)
-    // console.log(AllFriends)
+    allOnlineUsers = allUsers
     socket.emit("AllFriendsArray",userID,friendId)
 })
 socket.on("listOfAllFriendsArray",(result,id)=>{
    console.log(id)
     console.log(result)
+    // ovde porediti allOnlineUsers sa result - lista prijatelja
 })
