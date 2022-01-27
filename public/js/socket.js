@@ -147,12 +147,12 @@ buttonOpenChat.addEventListener("click", () => {
     let primaryDiv = document.getElementById("openchatBoxId")
     if (document.getElementById("listFriendsBox")) {
         document.getElementById("listFriendsBox").remove()
-        buttonOpenChat.setAttribute("style",'bottom:5px;top:auto;')
+        buttonOpenChat.setAttribute("style", 'bottom:5px;top:auto;')
     } else {
         const css = `
     background-color: #e6e4e4;
-    width:200px;
-    height:800px;
+    width:250px;
+    bottom:0;
     position:fixed;
     top:200px;
     right:0;
@@ -162,6 +162,7 @@ buttonOpenChat.addEventListener("click", () => {
         const css2 = `
     top: 177px;
     bottom: auto;
+    width:250px;
     `
         buttonOpenChat.setAttribute("style", css2)
         let div = document.createElement("div");
@@ -169,33 +170,152 @@ buttonOpenChat.addEventListener("click", () => {
         div.setAttribute("style", css);
         primaryDiv.append(div)
 
-        socket.emit("listOfAllFriendsChat",userID)
-        
+        socket.emit("listOfAllFriendsChat", userID)
+
     }
 })
-socket.on("showListOfFriends",(result)=>{
+socket.on("showListOfFriends", (result) => {
     console.log(result)
     let div = document.getElementById("listFriendsBox");
-    for(let i = 0; i < result.result.length;i++){
+    for (let i = 0; i < result.result.length; i++) {
         console.log(result.result[i].first_name)
         let li = document.createElement("p");
         let img = document.createElement("img")
         let p = document.createElement("p");
         p.style.cursor = "pointer"
-        img.setAttribute("src",`http://${result.result[i].image}`)
+        img.setAttribute("src", `http://${result.result[i].image}`)
         img.style.width = '25px'
+        img.style.borderRadius = "50%";
+        img.style.height = "25px";
         img.style.verticalAlign = "middle";
-        li.setAttribute("id",`${result.result[i].user_id}`)
-        li.style.display= "inline";
+        li.setAttribute("id", `${result.result[i].user_id}`)
+        li.style.display = "inline";
         li.style.marginLeft = "5px"
         li.textContent = result.result[i].first_name + ' ' + result.result[i].last_name
-        // let html = `
-        // <p><img src='http://${result.result[i].image}' width='20px' height='20px'>
-        // ${result.result[i].first_name}  ${result.result[i].last_name}
-        // </p>
-        // `
-        p.append(img,li)
+        p.addEventListener("click", () => {
+            const cssName = `
+            background-color: #e6e4e4;
+            height: 25px;
+            width: 250px;
+            position:fixed;
+            bottom: -15px;
+            right: 257px;
+            text-align: center;
+            
+            `
+            const cssChat =
+                `
+            background-color: #f7f7f7;
+            width: 248px;
+            position: fixed;
+            bottom: 40px;
+            right:257px;
+            height:400px;
+            border-color: black;
+            border: 1px solid;
+            
+            `
+            const cssInputChat =
+                `
+            background-color: #f7f7f7;
+            width: 198px;
+            position: fixed;
+            bottom: 26px;
+            right:303px;
+            height:25px;
+            border-color: black;
+            border: 1px solid;
+            `;
+            const cssButtonChat =
+                `
+            width:45px;
+            position: fixed;
+            bottom: 26px;
+            height: 29px;
+            right:257px;
+            displat: inline;
+            `;
+            if (document.getElementById("chatOpen_id")) {
+                document.getElementById("chatOpen_id").remove()
+            }
+            socket.emit("getChatMessages", result.result[i].user_id, userID)
+            let openChatId = document.getElementById("openChatId");
+            let pName = document.createElement("p");
+            pName.setAttribute("id", "chatOpen_id")
+            pName.innerText = result.result[i].first_name + ' ' + result.result[i].last_name;
+            pName.setAttribute("style", cssName)
+
+            let pChat = document.createElement("p");
+            pChat.setAttribute("style", cssChat);
+            pChat.setAttribute("id", "messagesId")
+
+            let inputChat = document.createElement("input");
+            inputChat.setAttribute("style", cssInputChat);
+
+            let buttonChat = document.createElement("button");
+            buttonChat.setAttribute("style", cssButtonChat);
+            buttonChat.innerText = "Send"
+
+            buttonChat.addEventListener("click", () => {
+                const pMessageStyle =
+                    `
+                width:50%;
+                word-wrap: break-word;
+                `;
+                socket.emit("sendMessage", userID, result.result[i].user_id, inputChat.value, logedUserInfo[0].first_name);
+                
+
+                let message = messages(inputChat.value,logedUserInfo[0].first_name)
+                let pMessage = document.createElement("p");
+                pMessage.setAttribute("style", pMessageStyle)
+                pMessage.innerText = message.message;
+                let pTime = document.createElement("p")
+                pTime.innerText = message.time;
+                let pUsername = document.createElement("p");
+                pUsername.innerText = message.username;
+                let div = document.createElement("div");
+                div.append(pUsername, pTime, pMessage)
+                pChat.append(div)
+            })
+
+
+
+
+            openChatId.append(pChat, inputChat, buttonChat, pName);
+
+        })
+        p.append(img, li)
         div.append(p);
-        
+
     }
 })
+
+socket.on("showMessage", (message) => {
+    console.log(message.message)
+    const pChat = document.getElementById("messagesId");
+    const pMessageStyle =
+        `
+                width:50%;
+                word-wrap: break-word;
+                `;
+    let pMessage = document.createElement("p");
+    pMessage.setAttribute("style", pMessageStyle)
+    pMessage.innerText = message.message;
+    let pTime = document.createElement("p")
+    pTime.innerText = message.time;
+    let pUsername = document.createElement("p");
+    pUsername.innerText = message.username;
+    let div = document.createElement("div");
+    div.append(pUsername, pTime, pMessage)
+    pChat.append(div)
+})
+function messages(message, username) {
+    var today = new Date();
+    var time = today.getHours() + ":" + today.getMinutes();
+    const returnMessage = {
+        "time": time,
+        "username": username,
+        "message": message
+    }
+    return returnMessage;
+}

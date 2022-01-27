@@ -21,6 +21,7 @@ const { loginAuth, getAllDate } = require('./controllers/login_reg/login');
 const { userRegistration, saveImage } = require('./controllers/login_reg/registration');
 const { saveImagePost, postText, getAllPosts, addFreind, checkTypeUser, likeDislike, getLikedPost, getDislikedPost, dislike, insertComment, getAllComents, getPostsFromFriends } = require('./controllers/profile');
 const { userJoin, userLeave, getUser } = require('./utils/users');
+const { messages } = require('./utils/messages');
 const { gitListoFfriends } = require('./controllers/chat');
 
 
@@ -30,6 +31,12 @@ io.on('connection', socket => {
     socket.on("userJoin", (userId) => {
 
         userJoin(socket.id, userId)
+    })
+    socket.on("sendMessage",(userId,friendId,message,username)=>{
+        const user =  getUser(friendId)
+        if(user.length > 0){
+            io.to(user[0].id).emit("showMessage",messages(message,username))
+        }
     })
     socket.on("listOfAllFriendsChat",(userId)=>{
         gitListoFfriends(userId).then((result)=>{
