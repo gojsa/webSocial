@@ -37,11 +37,24 @@ io.on('connection', socket => {
 
     socket.on("AllFriendsArray",(userId,friendId)=>{
         gitListoFfriends(userId).then((result)=>{
-            // let user = getUser(userId)
+            let user = getUser(userId)
+            console.log(result)
+            // for(let i = 0; i <result.length; i++){
 
-            io.emit('listOfAllFriendsArray', { result },friendId)
-            
+            //     const user =  getUser(result[i].user_id)
+            //     console.log(user)
+            //     if(user.length > 0){
+
+            //         io.to(user[0].id).emit('listOfAllFriendsArray', { result },friendId)
+            //     }
+                    
+            // }
+            io.to(user[0].id).emit('listOfAllFriendsArray', { result },friendId)
+
         })
+    })
+    socket.on("youAreOnline",(userId)=>{
+        io.emit("showYouOnline",userId)
     })
 
     socket.on("search",(findUser)=>{

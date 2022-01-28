@@ -9,14 +9,14 @@ socket.on("FriendRequestSend", (friendId) => {
 let logedUserInfo = JSON.parse(sessionStorage.getItem("logedUser"));
 
 let userID = logedUserInfo[0].user_id;
-let AllFriends;
+let AllFriends = [];
 let allOnlineUsersForCheck = [];
 
 
 
 socket.on("showAllPostsFromFriends", (data) => {
-    console.log(data);
-    console.log(data.result[0].image)
+    // console.log(data);
+    // console.log(data.result[0].image)
     const style = `width:200px;height:200px;`
     const div = document.getElementById("allMyPosts")
     for (let i = 0; i < data.result.length; i++) {
@@ -180,10 +180,10 @@ buttonOpenChat.addEventListener("click", () => {
     }
 })
 socket.on("showListOfFriends", (result) => {
-   console.log(result);
+    // console.log(result);
     let div = document.getElementById("listFriendsBox");
     for (let i = 0; i < result.result.length; i++) {
-        console.log(result.result[i].first_name)
+        // console.log(result.result[i].first_name)
         let li = document.createElement("p");
         let img = document.createElement("img")
         let p = document.createElement("p");
@@ -193,40 +193,37 @@ socket.on("showListOfFriends", (result) => {
         img.style.borderRadius = "50%";
         img.style.height = "25px";
         img.style.verticalAlign = "middle";
-        let imgStyleOnline = 
-        `
+        let imgStyleOnline =
+            `
         border: 3px solid #09cb09;
         width : 25px;
         border-radius:50%;
         height: 25px;
         vertical-align: middle;
         `
-        let imgStyleOffline = 
-        `
+        let imgStyleOffline =
+            `
         border: 3px solid silver;
         width : 25px;
         border-radius:50%;
         height: 25px;
         vertical-align: middle;
         `
-        for(let c = 0; c < allOnlineUsersForCheck.length; c++){
-            console.log(allOnlineUsersForCheck[c])
-            if(allOnlineUsersForCheck[c] == result.result[i].user_id){
-                console.log(11111111111111111111111111)
-                img.setAttribute("style",imgStyleOnline)
-            }else{
-                console.log(222222222222222222)
-                img.setAttribute("style",imgStyleOffline)
-                
-
-            }
+        img.setAttribute("style", imgStyleOffline)
+        img.setAttribute("id",`fr_img_${result.result[i].user_id}`)
+        for (let c = 0; c < allOnlineUsersForCheck.length; c++) {
+            // console.log(allOnlineUsersForCheck[c])
+            if (allOnlineUsersForCheck[c] == result.result[i].user_id) {
+               
+                img.setAttribute("style", imgStyleOnline)
+            } 
         }
-        
+
         li.setAttribute("id", `${result.result[i].user_id}`)
         li.style.display = "inline";
         li.style.marginLeft = "5px"
         li.textContent = result.result[i].first_name + ' ' + result.result[i].last_name
-        
+
         p.addEventListener("click", () => {
             const cssName = `
             background-color: #e6e4e4;
@@ -297,8 +294,8 @@ socket.on("showListOfFriends", (result) => {
             let buttonChat = document.createElement("button");
             buttonChat.setAttribute("style", cssButtonChat);
             buttonChat.innerText = "Send"
-            inputChat.addEventListener("click",()=>{
-                socket.emit("updateMessage",userID,result.result[i].user_id)
+            inputChat.addEventListener("click", () => {
+                socket.emit("updateMessage", userID, result.result[i].user_id)
             })
             buttonChat.addEventListener("click", () => {
                 const pMessageStyle =
@@ -348,7 +345,7 @@ socket.on("showListOfFriends", (result) => {
 })
 
 socket.on("showMessage", (message) => {
-    console.log(message.message)
+    // console.log(message.message)
     const pChat = document.getElementById("messagesId");
     const pMessageStyle =
         `
@@ -385,64 +382,91 @@ function messages(message, username) {
 }
 let allOnlineUsers;
 
-socket.on("telAllthahtYouOnline",(friendId,allUsers)=>{
+socket.on("telAllthahtYouOnline", (friendId, allUsers) => {
     // for(let i = 0 ; i < AllFriends.length)
     allOnlineUsers = allUsers
-    socket.emit("AllFriendsArray",userID,friendId)
+    socket.emit("AllFriendsArray", userID, friendId)
 })
-socket.on("listOfAllFriendsArray",(result,id)=>{
-   console.log(id)
-    console.log(allOnlineUsers)
-    for(let i = 0; i <result.result.length; i++){
-        for(let a = 0; a < allOnlineUsers.length; a++){
-            
-            if(result.result[i].user_id == allOnlineUsers[a].user_id){
-                
+socket.on("listOfAllFriendsArray", (result, id) => {
+    // console.log(id)
+    // console.log(allOnlineUsers)
+    console.log(result)
+    socket.emit("youAreOnline",userID)
+    for (let i = 0; i < result.result.length; i++) {
+        AllFriends.push(result.result[i].user_id)
+        for (let a = 0; a < allOnlineUsers.length; a++) {
+
+            if (result.result[i].user_id == allOnlineUsers[a].user_id) {
+
                 allOnlineUsersForCheck.push(allOnlineUsers[a].user_id)
             }
+         
 
         }
-        
+        console.log(result.result[i].user_id)
+        console.log(id)
+
+     
     }
-    console.log(allOnlineUsersForCheck)
-    // ovde porediti allOnlineUsers sa result - lista prijatelja
+    // console.log(allOnlineUsersForCheck)
 })
 
 const search = document.getElementById("search_id");
-search.addEventListener("keyup",()=>{
-   
+search.addEventListener("keyup", () => {
+
     socket.emit("search", search.value);
 })
 
-socket.on("showUsers",(result)=>{
+socket.on("showUsers", (result) => {
     let div = document.createElement("div");
-    div.setAttribute("id","allUsersId")
-    const css = 
-    `
+    div.setAttribute("id", "allUsersId")
+    const css =
+        `
     cursor: pointer;
     background-color: #f7f7f7;
     width:150px;
     height: 20px;
     `
-    for(let i = 0; i < result.result.length; i++){
-        if(document.getElementById("allUsersId")){
+    for (let i = 0; i < result.result.length; i++) {
+        if (document.getElementById("allUsersId")) {
             document.getElementById("allUsersId").remove()
         }
-        
+
         let name = document.createElement("p");
-        name.setAttribute("style",css)
+        name.setAttribute("style", css)
 
-       name.addEventListener("click",()=>{
-        window.location.replace(`http://localhost:4444/profile?id=${result.result[i].user_id}`);
+        name.addEventListener("click", () => {
+            window.location.replace(`http://localhost:4444/profile?id=${result.result[i].user_id}`);
 
-       })
-        
-        name.innerText = result.result[i].first_name + ' ' + result.result[i].last_name; 
+        })
+
+        name.innerText = result.result[i].first_name + ' ' + result.result[i].last_name;
         div.append(name)
-        
-let searchAppend = document.getElementById("search_id");
-searchAppend.parentElement.append(div)
+
+        let searchAppend = document.getElementById("search_id");
+        searchAppend.parentElement.append(div)
 
 
+    }
+})
+
+socket.on("showYouOnline",(useriD)=>{
+    for(let i = 0; i<AllFriends.length; i++){
+        if(AllFriends[i] == useriD){
+            // console.log(334455)
+
+            if(document.getElementById(`fr_img_${useriD}`)){ 
+                // console.log(111122233)
+            let imgStyleOnline1 =
+            `
+            border: 3px solid #09cb09;
+            width : 25px;
+            border-radius:50%;
+            height: 25px;
+            vertical-align: middle;
+            `
+            document.getElementById(`fr_img_${useriD}`).setAttribute("style",imgStyleOnline1)
+        }
+    }
     }
 })
