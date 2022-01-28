@@ -18,6 +18,14 @@
         // logedUserInfo = data
         console.log(data)
       }).catch(function () {
-        console.log("Booo");
+       
+        const style = 
+        `
+        color:red;
+        text-align:center;
+        `;
+        let msg = document.getElementById("errorMessage");
+        msg.setAttribute("style",style)
+        msg.textContent = "Wrong credentials! Try again."
       });
   })

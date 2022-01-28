@@ -22,7 +22,7 @@ const { userRegistration, saveImage } = require('./controllers/login_reg/registr
 const { saveImagePost, postText, getAllPosts, addFreind, checkTypeUser, likeDislike, getLikedPost, getDislikedPost, dislike, insertComment, getAllComents, getPostsFromFriends } = require('./controllers/profile');
 const { userJoin, userLeave, getUser,getOnlineUsers } = require('./utils/users');
 const { messages } = require('./utils/messages');
-const { gitListoFfriends,insertMessage, updateMessage } = require('./controllers/chat');
+const { gitListoFfriends,insertMessage, updateMessage,findAllUser } = require('./controllers/chat');
 
 
 // const { redirect } = require("express/lib/response");
@@ -41,6 +41,12 @@ io.on('connection', socket => {
 
             io.emit('listOfAllFriendsArray', { result },friendId)
             
+        })
+    })
+
+    socket.on("search",(findUser)=>{
+        findAllUser(findUser).then((result)=>{
+            socket.emit("showUsers",{result})
         })
     })
     socket.on("updateMessage",(myId,senderId)=>{

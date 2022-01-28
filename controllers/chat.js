@@ -36,4 +36,15 @@ const updateMessage = (myId, senderId) => new Promise((res, rejact) => {
     });
 })
 
-module.exports = { gitListoFfriends, insertMessage, updateMessage };
+const findAllUser = (search) => new Promise((res, rejact) => {
+    const query = `
+    select * from users where first_name like '%${search}%' or last_name = '%${search}%'
+    `
+    db_connection.query(query, (err, results) => {
+        if (err) console.error(err);
+        res(results);
+
+    });
+})
+
+module.exports = { gitListoFfriends, insertMessage, updateMessage,findAllUser };

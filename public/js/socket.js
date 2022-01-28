@@ -1,3 +1,4 @@
+
 var socket = io.connect('http://127.0.0.1:4444', { transports: ['websocket', 'polling', 'flashsocket'] });
 socket.emit("userJoin", sessionStorage.getItem("userId"))
 // console.log(socket.id)
@@ -362,4 +363,43 @@ socket.on("listOfAllFriendsArray",(result,id)=>{
    console.log(id)
     console.log(result)
     // ovde porediti allOnlineUsers sa result - lista prijatelja
+})
+
+const search = document.getElementById("search_id");
+search.addEventListener("keyup",()=>{
+   
+    socket.emit("search", search.value);
+})
+
+socket.on("showUsers",(result)=>{
+    let div = document.createElement("div");
+    div.setAttribute("id","allUsersId")
+    const css = 
+    `
+    cursor: pointer;
+    background-color: #f7f7f7;
+    width:150px;
+    height: 20px;
+    `
+    for(let i = 0; i < result.result.length; i++){
+        if(document.getElementById("allUsersId")){
+            document.getElementById("allUsersId").remove()
+        }
+        
+        let name = document.createElement("p");
+        name.setAttribute("style",css)
+
+       name.addEventListener("click",()=>{
+        window.location.replace(`http://localhost:4444/profile?id=${result.result[i].user_id}`);
+
+       })
+        
+        name.innerText = result.result[i].first_name + ' ' + result.result[i].last_name; 
+        div.append(name)
+        
+let searchAppend = document.getElementById("search_id");
+searchAppend.parentElement.append(div)
+
+
+    }
 })

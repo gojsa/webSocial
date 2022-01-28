@@ -202,4 +202,7 @@ const getPostsFromFriends = (userId) => new Promise((res, rejact) => {
 
     });
 })
+
+
+
 module.exports = { saveImagePost, postText, getAllPosts, addFreind, checkTypeUser, likeDislike, getLikedPost, getDislikedPost, dislike, insertComment, getAllComents, getPostsFromFriends };
