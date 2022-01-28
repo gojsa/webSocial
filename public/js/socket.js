@@ -10,7 +10,7 @@ let logedUserInfo = JSON.parse(sessionStorage.getItem("logedUser"));
 
 let userID = logedUserInfo[0].user_id;
 let AllFriends;
-
+let allOnlineUsersForCheck = [];
 
 
 
@@ -180,7 +180,7 @@ buttonOpenChat.addEventListener("click", () => {
     }
 })
 socket.on("showListOfFriends", (result) => {
-   
+   console.log(result);
     let div = document.getElementById("listFriendsBox");
     for (let i = 0; i < result.result.length; i++) {
         console.log(result.result[i].first_name)
@@ -193,10 +193,40 @@ socket.on("showListOfFriends", (result) => {
         img.style.borderRadius = "50%";
         img.style.height = "25px";
         img.style.verticalAlign = "middle";
+        let imgStyleOnline = 
+        `
+        border: 3px solid #09cb09;
+        width : 25px;
+        border-radius:50%;
+        height: 25px;
+        vertical-align: middle;
+        `
+        let imgStyleOffline = 
+        `
+        border: 3px solid silver;
+        width : 25px;
+        border-radius:50%;
+        height: 25px;
+        vertical-align: middle;
+        `
+        for(let c = 0; c < allOnlineUsersForCheck.length; c++){
+            console.log(allOnlineUsersForCheck[c])
+            if(allOnlineUsersForCheck[c] == result.result[i].user_id){
+                console.log(11111111111111111111111111)
+                img.setAttribute("style",imgStyleOnline)
+            }else{
+                console.log(222222222222222222)
+                img.setAttribute("style",imgStyleOffline)
+                
+
+            }
+        }
+        
         li.setAttribute("id", `${result.result[i].user_id}`)
         li.style.display = "inline";
         li.style.marginLeft = "5px"
         li.textContent = result.result[i].first_name + ' ' + result.result[i].last_name
+        
         p.addEventListener("click", () => {
             const cssName = `
             background-color: #e6e4e4;
@@ -354,6 +384,7 @@ function messages(message, username) {
     return returnMessage;
 }
 let allOnlineUsers;
+
 socket.on("telAllthahtYouOnline",(friendId,allUsers)=>{
     // for(let i = 0 ; i < AllFriends.length)
     allOnlineUsers = allUsers
@@ -361,7 +392,19 @@ socket.on("telAllthahtYouOnline",(friendId,allUsers)=>{
 })
 socket.on("listOfAllFriendsArray",(result,id)=>{
    console.log(id)
-    console.log(result)
+    console.log(allOnlineUsers)
+    for(let i = 0; i <result.result.length; i++){
+        for(let a = 0; a < allOnlineUsers.length; a++){
+            
+            if(result.result[i].user_id == allOnlineUsers[a].user_id){
+                
+                allOnlineUsersForCheck.push(allOnlineUsers[a].user_id)
+            }
+
+        }
+        
+    }
+    console.log(allOnlineUsersForCheck)
     // ovde porediti allOnlineUsers sa result - lista prijatelja
 })
 
