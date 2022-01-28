@@ -263,7 +263,7 @@ app.post("/uploadpostimg/:id/:sometext", (req, res) => {
 
 
 })
-
+//zokaaaaaaaaaaaaaaaa
 
 // const { init } = require('./config/mysql');
 // const { render } = require("express/lib/response");
