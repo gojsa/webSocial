@@ -72,7 +72,12 @@ const getAllPosts = (userId, friendId) => new Promise((res, rejact) => {
 
 
     if (userId === friendId) {
-        const query = `select a.post_id,sql11462731.count_like_dislike(a.post_id, 'L')as p_like,sql11462731.count_like_dislike(a.post_id, 'D')as p_dislike, a.description,b.image,a.date_created from posts a inner join images b on a.image_id = b.image_id where a.user_id = ${userId} and b.status_id = 2 order by a.date_created desc`;
+        const query = `select a.post_id,a.date_created,sql11462731.count_like_dislike(a.post_id, 'L')as p_like,sql11462731.count_like_dislike(a.post_id, 'D')as p_dislike,
+        a.description,b.image,a.date_created,u.first_name,u.last_name,pm.image as profile_image from posts a 
+       join images b on a.image_id = b.image_id 
+       join users u on a.user_id = u.user_id
+       join images pm on a.user_id = pm.user_id
+       where a.user_id = ${userId} and b.status_id = 2  and pm.status_id = 1 and pm.valid = 'Y' order by a.date_created desc`;
 
         db_connection.query(query, (err, results) => {
             if (err) console.error(err);
@@ -98,7 +103,12 @@ const getAllPosts = (userId, friendId) => new Promise((res, rejact) => {
             // res(results);
 
             if (results.length > 0) {
-                const query = `select a.post_id,sql11462731.count_like_dislike(a.post_id, 'L')as p_like,sql11462731.count_like_dislike(a.post_id, 'D')as p_dislike, a.description,b.image,a.date_created from posts a inner join images b on a.image_id = b.image_id where a.user_id = ${userId} and b.status_id = 2 order by a.date_created desc`;
+                const query = `select mu.image as profile_image,u.first_name,u.last_name,a.post_id,sql11462731.count_like_dislike(a.post_id, 'L')as p_like,sql11462731.count_like_dislike(a.post_id, 'D')as p_dislike,
+                 a.description,b.image,a.date_created from posts a 
+                 inner join images b on a.image_id = b.image_id 
+                 join users u on a.user_id = u.user_id
+                 join images mu on a.user_id = mu.user_id
+                 where a.user_id = ${userId} and b.status_id = 2 and mu.status_id = 1 and mu.valid = 'Y' order by a.date_created desc`;
 
                 db_connection.query(query, (err, results) => {
                     if (err) console.error(err);

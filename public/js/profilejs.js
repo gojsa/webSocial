@@ -18,6 +18,7 @@ async function postData(url = '', data = {}) {
   });
   return response.json(); // parses JSON response into native JavaScript objects
 }
+let userProfileImage;
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString)
 const id = urlParams.get('id')
@@ -27,17 +28,17 @@ fetch(`/allDate/${id}`).then(function (response) {
   sessionStorage.setItem("allData", JSON.stringify(data))
   console.log(data)
    allData = JSON.parse(sessionStorage.getItem("allData"))
+console.log(allData[0].last_name)
+  // let profileImage = document.getElementById("profile_image_id");
+  // profileImage.setAttribute("src", 'http://' + allData[0].image)
+  let firstName = document.getElementById("first_last_name_id");
+  firstName.innerText =  allData[0].last_name +' '+ allData[0].first_name;
+  // const lastName = document.getElementById("last_name_id");
+  // lastName.innerText = 'Last name: '+ allData[0].last_name;
 
-  const profileImage = document.getElementById("profile_image_id");
-  profileImage.setAttribute("src", 'http://' + allData[0].image)
-  const firstName = document.getElementById("first_name_id");
-  const lastName = document.getElementById("last_name_id");
-  firstName.innerText = 'Name: '+ allData[0].first_name;
-  lastName.innerText = 'Last name: '+ allData[0].last_name;
 
-
-}).catch(function () {
-  console.log("Booo");
+}).catch(function (err) {
+  console.log(err);
 });
 
 
@@ -54,11 +55,12 @@ button.addEventListener("click", () => {
   formPostImg.submit()
 })
 const divAddFriendButton = document.getElementById("div_add_friend_button");
+divAddFriendButton.style.display = "none"
 if(id != sessionStorage.getItem("userId")){
-  const button = document.createElement("button");
-  button.textContent = "Add Friend";
-  button.setAttribute("id","add_friend_id")
-  divAddFriendButton.appendChild(button)
+  // const button = document.createElement("button");
+  // button.textContent = "Add Friend";
+  // button.setAttribute("id","add_friend_id")
+  // divAddFriendButton.appendChild(button)
   
   document.getElementById("form_upload_pic_id").style.display = 'none';
 
@@ -66,20 +68,28 @@ if(id != sessionStorage.getItem("userId")){
   socket.on("userType",(result)=>{
     console.log(result)
     
+    let buttonAddF = document.getElementById("div_add_friend_button")
+    buttonAddF.style.display ="inline"
     if(result.result[0].valid === 'REQUEST SENT'){
-      document.getElementById("add_friend_id").textContent = "Request sent"
+      buttonAddF.innerHTML = `
+      <i class="fa fa-user-plus" style="font-size:20px">
+      Request sent`
       
     }else if(result.result[0].valid === 'ACTIVE'){
-      document.getElementById("add_friend_id").textContent = "Friends"
+      document.getElementById("div_add_friend_button").innerHTML = `
+      <i class="fa fa-user-plus" style="font-size:20px">
+      Friends`
 
     }else if(result.result[0].valid === 'PANDING REQUEST'){
-      document.getElementById("add_friend_id").textContent = "Accept?"
+      document.getElementById("div_add_friend_button").innerHTML = `
+      <i class="fa fa-user-plus" style="font-size:20px">
+      Accept?`
       //Logika za prihvatanje i odbijanje zahtjeva za prijateljstvo
     }
     else{
-      button.addEventListener("click",()=>{
+      divAddFriendButton.addEventListener("click",()=>{
         socket.emit("addUser",sessionStorage.getItem("userId"),id);
-        document.getElementById("add_friend_id").textContent = "Request sent"
+        document.getElementById("div_add_friend_button").textContent = "Request sent"
     
       })
     }
@@ -91,11 +101,98 @@ fetch(`/AllPosts/${id}/${sessionStorage.getItem("userId")}`).then(function (resp
 }).then(function (data) {
   console.log(data)
   const style = `width:200px;height:200px;`
-  const div = document.getElementById("allMyPosts")
+  const divP = document.getElementById("allMyPosts")
   for (let i = 0; i < data.length; i++) {
+
+    let bigDiv = document.createElement("div");
+    bigDiv.classList.add("post2");
+    let userDiv = document.createElement("div");
+    userDiv.classList.add("user-profil")
+    let userImg = document.createElement("img");
+    userImg.classList.add("user");
+    userImg.setAttribute("alt","user")
+    userImg.setAttribute("src",'http://'+data[i].profile_image)
+
+    let span = document.createElement("span");
+    span.classList.add("span");
+    let hForUser = document.createElement("h4");
+    hForUser.setAttribute("style","color: rgb(51, 49, 49);")
+    // hForUser.innerText = 'Zoran Blagojevic '
+    hForUser.innerText = data[i].first_name + ' ' + data[i].last_name
+    let pPostU = document.createElement("p");
+    pPostU.style.color = "#726d6d"
+    pPostU.innerText = " "+' is upload the post'
+    let Small = document.createElement("small");
+    let iIcon = document.createElement("i");
+    iIcon.classList.add("fa")
+    iIcon.classList.add("fa-clock-o")
+    let date = new Date(data[i].date_created)
+    let cDate = new Date();
+    let currentDate = cDate.getDate() + '/'+cDate.getMonth()+1 + '/'+cDate.getFullYear()
+    let ytDate = cDate.getDate()-1 + '/'+cDate.getMonth()+1 + '/'+cDate.getFullYear()
+
+    console.log(currentDate)
+    console.log(date.getDate()+'/'+date.getMonth()+1+'/'+date.getFullYear())
+
+    if(currentDate == date.getDate()+'/'+date.getMonth()+1+'/'+date.getFullYear()){
+    Small.textContent = "Today at " + date.getHours()+':'+date.getMinutes();
+
+    }else if(ytDate == date.getDate()+'/'+date.getMonth()+1+'/'+date.getFullYear()){
+    Small.textContent = "Yestarday at " + date.getHours()+':'+date.getMinutes();
+
+    }else{
+      
+      Small.textContent = date.toLocaleString();
+    }
+
+    let divImgU = document.createElement("div")
+    divImgU.classList.add("foto")
+    let divImgPostU = document.createElement("img");
+    divImgPostU.style.width = "550px";
+    divImgPostU.style.height = "420px";
+    divImgPostU.setAttribute("src", 'http://' + data[i].image);
+    divImgU.append(divImgPostU)
+
+    let divLikeCom = document.createElement("div");
+    divLikeCom.classList.add("like-com");
+
+    let divBUtton = document.createElement("button");
+    divBUtton.classList.add("like")
+    divBUtton.style.fontSize = "20px"
+
+    let iFD = document.createElement("i");
+    iFD.classList.add("fa");
+    iFD.classList.add("fa-thumbs-o-up");
+    let pIDiv = document.createElement("p");
+    pIDiv.innerText =`Like + ${data[i].p_like}` 
+    let button4 = document.createElement("button");
+    button4.classList.add("coment");
+    let buttI = document.createElement("i");
+    buttI.classList.add("fa");
+    buttI.classList.add("fa-comments-o");
+    buttI.style.fontSize = "20px"
+    let pNumberComment = document.createElement("p")
+    pNumberComment.innerText = "5"
+
+
+
+
+    divLikeCom.append(divBUtton,iFD,pIDiv,button4,buttI,pNumberComment)
+    span.append(hForUser,pPostU)
+    userDiv.append(userImg,span,Small)
+    bigDiv.append(userDiv,divImgU,divLikeCom)
+    divP.append(bigDiv)
+
     let img = document.createElement("img");
     img.setAttribute("src", 'http://' + data[i].image);
     img.setAttribute("style", style);
+    //
+    // profilna slika
+    const profImg = document.getElementById("profile_picture_id");
+    profImg.setAttribute("src",'http://' + data[i].image)
+    userProfileImage = 'http://' + data[i].image;
+    document.getElementById("postUserImage").setAttribute("src",userProfileImage)
+    //
     let pDiv = document.createElement("div");
 
     let postText = document.createElement("p");
@@ -142,20 +239,20 @@ fetch(`/AllPosts/${id}/${sessionStorage.getItem("userId")}`).then(function (resp
     divComment.append(buttonOpenComm,divInnerComment)
 
     
-///////////////
-    let divLD = document.createElement("div");
-    divLD.append(likeButton,dislikeButton,divComment);
-    pDiv.append(divLD)
+/////////////
+    // let divLD = document.createElement("div");
+    // divLD.append(likeButton,dislikeButton,divComment);
+    // pDiv.append(divLD)
    
-    div.append(pDiv)
+    // div.append(pDiv)
 
-    document.getElementById(`${data[i].post_id}_button_comments`).addEventListener("click",()=>{
-      document.getElementById(`${data[i].post_id}_inner_comments`).style.display = "block";
-      socket.emit("getAllComentsForPost",data[i].post_id);
-    })
+    // document.getElementById(`${data[i].post_id}_button_comments`).addEventListener("click",()=>{
+    //   document.getElementById(`${data[i].post_id}_inner_comments`).style.display = "block";
+    //   socket.emit("getAllComentsForPost",data[i].post_id);
+    // })
   }
-}).catch(function () {
-  console.log("Booo");
+}).catch(function (err) {
+  console.log(err);
 });
 socket.on("showUpdatedLike",(result)=>{
   
