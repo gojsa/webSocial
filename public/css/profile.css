@@ -18,6 +18,7 @@ body{
 }
 .left img{
     width: 130px;
+    height: 130px;
     border-radius: 50%;
     border: 7px solid #efefef;   
 }
@@ -43,6 +44,7 @@ input[type="file"]{
 }
 .left h2{
     margin-left: 25px;  
+    margin-block:auto;
 }
 .right{
     align-self: center;
@@ -89,6 +91,7 @@ input[type="file"]{
 }
 .user{
     width: 35px;
+    height: 35px;
     border-radius: 50%;
     border: 2px solid #c7c2c2;
     vertical-align: top;  
@@ -189,6 +192,9 @@ input[type="file"]{
     border:none;
     resize: none;
     background-color: #ebe4e4;  
+    text-align: center;
+    padding: 10px;
+
 }
 .sve-slike{
     display:flex;
