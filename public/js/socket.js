@@ -11,9 +11,12 @@ let logedUserInfo = JSON.parse(sessionStorage.getItem("logedUser"));
 let userID = logedUserInfo[0].user_id;
 let AllFriends = [];
 let allOnlineUsersForCheck = [];
+let allMyFriends = {}
 
-
-
+const qqueryString = window.location.search;
+const uurlParams = new URLSearchParams(qqueryString)
+const idUser = uurlParams.get('id')
+console.log(idUser)
 socket.on("showAllPostsFromFriends", (data) => {
     // console.log(data);
     // console.log(data.result[0].image)
@@ -34,6 +37,7 @@ socket.on("showAllPostsFromFriends", (data) => {
         let likeButton = document.createElement("button");
         let dislikeButton = document.createElement("button");
         likeButton.setAttribute("id", `${data.result[i].post_id}_like`)
+        likeButton.classList.add("button-like-dislike-class")
         dislikeButton.setAttribute("id", `${data.result[i].post_id}_dislike`)
 
         likeButton.textContent = `Like ${data.result[i].p_like}`;
@@ -89,7 +93,7 @@ socket.on("showUpdatedLike", (result) => {
 
     let button = document.getElementById(`${result.result[0][0].post_id}_like`);
     button.textContent = `Like ${result.result[0][0].p_like}`;
-    button.style.backgroundColor = "lightblue"
+    button.style.backgroundColor = "#caf1fd"
 })
 socket.on("showUpdatedDislike", (result) => {
 
@@ -97,8 +101,7 @@ socket.on("showUpdatedDislike", (result) => {
     button.textContent = `Deslike ${result.result[0][0].p_dislike}`;
     button.style.backgroundColor = "lightblue"
 })
-socket.emit("getAllDislikedPost", sessionStorage.getItem("userId"));
-socket.emit("getAllLikedPost", sessionStorage.getItem("userId"));
+
 socket.on("allDislikedPost", (result) => {
 
     for (let i = 0; i < result.result.length; i++) {
@@ -106,19 +109,20 @@ socket.on("allDislikedPost", (result) => {
 
         if (buttonLike) {
 
-            buttonLike.style.backgroundColor = 'lightblue';
+            buttonLike.style.backgroundColor = '#caf1fd';
         }
     }
 })
 
 socket.on("allLikedPost", (result) => {
+    console.log(result)
 
     for (let i = 0; i < result.result.length; i++) {
         let buttonLike = document.getElementById(`${result.result[i].post_id}_like`)
-
+       
         if (buttonLike) {
-
-            buttonLike.style.backgroundColor = 'lightblue';
+            
+            buttonLike.style.backgroundColor = '#caf1fd';
         }
     }
 })
@@ -126,25 +130,31 @@ socket.on("allLikedPost", (result) => {
 socket.on("showComment", (result) => {
 
     for (let i = 0; i < result.result.length; i++) {
-
+        let div = document.createElement("div")
+            div.className = "div-for-comments"
         let p = document.createElement("p");
         let pUser = document.createElement("p");
         pUser.textContent = result.result[i].first_name + ' ' + result.result[i].last_name;
         p.setAttribute("id", `${result.result[i].post_meta_id}_comment`)
         p.textContent = result.result[i].comment
         pUser.style.fontWeight = "bold"
-        document.getElementById(`${result.result[i].post_id}_inner_comments`).append(pUser, p)
+        div.append(pUser,p)
+        document.getElementById(`${result.result[i].post_id}_inner_comments`).append(div)
     }
 })
 
 socket.on("showInsertComment", (comment, postId, firstName, lastName) => {
+    let div = document.createElement("div")
+            div.className = "div-for-comments"
     let p = document.createElement("p");
     let pUser = document.createElement("p");
     pUser.textContent = firstName + ' ' + lastName;
     p.setAttribute("id", `${postId}_comment`)
     p.textContent = comment
     pUser.style.fontWeight = "bold"
-    document.getElementById(`${postId}_inner_comments`).append(pUser, p)
+    div.append(pUser,p)
+
+    document.getElementById(`${postId}_inner_comments`).append(div)
 })
 
 const buttonOpenChat = document.getElementById("openChat");
@@ -216,7 +226,11 @@ socket.on("showListOfFriends", (result) => {
             if (allOnlineUsersForCheck[c] == result.result[i].user_id) {
                
                 img.setAttribute("style", imgStyleOnline)
+                
+                document.getElementById("profile_picture_id").style.borderColor = "#09cb09"
             } 
+            // if(allOnlineUsersForCheck[c] == result.result[i].user_id){
+            // }
         }
 
         li.setAttribute("id", `${result.result[i].user_id}`)
@@ -388,8 +402,31 @@ socket.on("telAllthahtYouOnline", (friendId, allUsers) => {
     socket.emit("AllFriendsArray", userID, friendId)
 })
 socket.on("listOfAllFriendsArray", (result, id) => {
-    // console.log(id)
-    // console.log(allOnlineUsers)
+    
+    allMyFriends = result;
+    const friendsDiv = document.getElementById("friends_id");
+    console.log(idUser)
+    console.log(sessionStorage.getItem("userId"))
+    if(idUser == sessionStorage.getItem("userId")){
+for(let i = 0; i < result.result.length; i++){
+    
+
+    let div = document.createElement("div")
+    let a = document.createElement("a");
+        div.className = "litle-friends-class"
+        a.setAttribute("href",`http://localhost:4444/profile?id=${result.result[i].user_id}`)
+    let img = document.createElement("img")
+        img.setAttribute("src","http://"+ result.result[i].image)
+        img.className = "friends-image-class";
+    let p = document.createElement("p");
+        p.innerText = result.result[i].first_name + ' ' + result.result[i].last_name
+
+        a.append(img,p)
+        div.append(a)
+        friendsDiv.append(div)
+}
+    }
+
     console.log(result)
     socket.emit("youAreOnline",userID)
     for (let i = 0; i < result.result.length; i++) {
@@ -470,3 +507,23 @@ socket.on("showYouOnline",(useriD)=>{
     }
     }
 })
+
+
+
+console.log(allOnlineUsersForCheck);
+// for (let z = 0; z < allOnlineUsersForCheck.length; z++) {
+//     console.log(1313)
+//     console.log(allOnlineUsersForCheck[0])
+//     // console.log(allOnlineUsersForCheck[c])
+//     if (allOnlineUsersForCheck[z] == idUser) {
+       
+        
+//         document.getElementById("profile_picture_id").style.borderColor = "#09cb09"
+//     } 
+    
+// }
+console.log(allOnlineUsersForCheck.length);
+
+for(let i = 0; i < allOnlineUsersForCheck.length; i++){
+    console.log(allOnlineUsersForCheck.length)
+}

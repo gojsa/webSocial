@@ -38,7 +38,7 @@ io.on('connection', socket => {
     socket.on("AllFriendsArray",(userId,friendId)=>{
         gitListoFfriends(userId).then((result)=>{
             let user = getUser(userId)
-            console.log(result)
+            // console.log(result)
             // for(let i = 0; i <result.length; i++){
 
             //     const user =  getUser(result[i].user_id)

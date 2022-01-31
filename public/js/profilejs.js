@@ -29,12 +29,10 @@ fetch(`/allDate/${id}`).then(function (response) {
   console.log(data)
    allData = JSON.parse(sessionStorage.getItem("allData"))
 console.log(allData[0].last_name)
-  // let profileImage = document.getElementById("profile_image_id");
-  // profileImage.setAttribute("src", 'http://' + allData[0].image)
+  
   let firstName = document.getElementById("first_last_name_id");
   firstName.innerText =  allData[0].last_name +' '+ allData[0].first_name;
-  // const lastName = document.getElementById("last_name_id");
-  // lastName.innerText = 'Last name: '+ allData[0].last_name;
+  
   document.getElementById("profile_picture_id").setAttribute("src","http://"+ allData[0].image)
   document.getElementById("postUserImage").setAttribute("src","http://"+ allData[0].image)
 
@@ -59,10 +57,7 @@ button.addEventListener("click", () => {
 const divAddFriendButton = document.getElementById("div_add_friend_button");
 divAddFriendButton.style.display = "none"
 if(id != sessionStorage.getItem("userId")){
-  // const button = document.createElement("button");
-  // button.textContent = "Add Friend";
-  // button.setAttribute("id","add_friend_id")
-  // divAddFriendButton.appendChild(button)
+ 
   
   document.getElementById("form_upload_pic_id").style.display = 'none';
 
@@ -119,8 +114,12 @@ fetch(`/AllPosts/${id}/${sessionStorage.getItem("userId")}`).then(function (resp
     span.classList.add("span");
     let hForUser = document.createElement("h4");
     hForUser.setAttribute("style","color: rgb(51, 49, 49);")
-    // hForUser.innerText = 'Zoran Blagojevic '
     hForUser.innerText = data[i].first_name + ' ' + data[i].last_name
+    hForUser.addEventListener("click",()=>{
+      window.location.replace(`http://localhost:4444/profile?id=${data[i].user_id}`);
+      // console.log(data[i].user_id)
+    })
+    hForUser.style.cursor = "pointer"
     let pPostU = document.createElement("p");
     pPostU.style.color = "#726d6d"
     pPostU.innerText = " "+' is upload the post'
@@ -140,7 +139,7 @@ fetch(`/AllPosts/${id}/${sessionStorage.getItem("userId")}`).then(function (resp
     Small.textContent = "Today at " + date.getHours()+':'+date.getMinutes();
 
     }else if(ytDate == date.getDate()+'/'+date.getMonth()+1+'/'+date.getFullYear()){
-    Small.textContent = "Yestarday at " + date.getHours()+':'+date.getMinutes();
+    Small.textContent = "Yesterday at " + date.getHours()+':'+date.getMinutes();
 
     }else{
       
@@ -158,32 +157,15 @@ fetch(`/AllPosts/${id}/${sessionStorage.getItem("userId")}`).then(function (resp
     
     divImgU.append(postText,divImgPostU)
 
-    let divLikeCom = document.createElement("div");
-    // // divLikeCom.classList.add("like-com");
-
-    // let divBUtton = document.createElement("button");
-    // // divBUtton.classList.add("like")
-    // divBUtton.style.fontSize = "20px"
-
-    // let iFD = document.createElement("i");
-    // iFD.classList.add("fa");
-    // iFD.classList.add("fa-thumbs-o-up");
-    // let pIDiv = document.createElement("p");
-    // pIDiv.innerText =`Like + ${data[i].p_like}` 
-    // let button4 = document.createElement("button");
-    // button4.classList.add("coment");
-    // let buttI = document.createElement("i");
-    // buttI.classList.add("fa");
-    // buttI.classList.add("fa-comments-o");
-    // buttI.style.fontSize = "20px"
-    // let pNumberComment = document.createElement("p")
-    // pNumberComment.innerText = "5"
-
-    /////
+    
     let likeButton = document.createElement("button");
     let dislikeButton = document.createElement("button");
     likeButton.setAttribute("id",`${data[i].post_id}_like`)
+    likeButton.className ="button-like-dislike-class"
+
     dislikeButton.setAttribute("id",`${data[i].post_id}_dislike`)
+    dislikeButton.className ="button-like-dislike-class"
+
 
     likeButton.textContent = `Like ${data[i].p_like}`;
     dislikeButton.textContent = `Dislike ${data[i].p_dislike}`
@@ -193,58 +175,18 @@ fetch(`/AllPosts/${id}/${sessionStorage.getItem("userId")}`).then(function (resp
     dislikeButton.addEventListener("click",()=>{
       socket.emit("dislikePost",data[i].post_id,sessionStorage.getItem("userId"))
     })
-    let divForButtons = document.createElement("div");
-    divForButtons.append(likeButton,dislikeButton)
-    ////pIDiv
-
-
-
-
-    divLikeCom.append(divForButtons)//divBUtton,iFD,button4,buttI,pNumberComment
+    
     span.append(hForUser,pPostU)
     userDiv.append(userImg,span,Small)
-    bigDiv.append(userDiv,divImgU,divLikeCom) //
+    bigDiv.append(userDiv,divImgU) //divLikeCom
     divP.append(bigDiv)
-
-    let img = document.createElement("img");
-    img.setAttribute("src", 'http://' + data[i].image);
-    img.setAttribute("style", style);
-    //
-    // profilna slika
-    // const profImg = document.getElementById("profile_picture_id");
-    // profImg.setAttribute("src",'http://' + data[i].image)
-    // userProfileImage = 'http://' + data[i].image;
-    // document.getElementById("postUserImage").setAttribute("src",userProfileImage)
-    //
-    // let pDiv = document.createElement("div");
-
-    // let postText = document.createElement("p");
-    // postText.innerText = data[i].description;
-    // pDiv.appendChild(postText);
-    // pDiv.appendChild(img)
-    // let likeButton = document.createElement("button");
-    // let dislikeButton = document.createElement("button");
-    // likeButton.setAttribute("id",`${data[i].post_id}_like`)
-    // dislikeButton.setAttribute("id",`${data[i].post_id}_dislike`)
-
-    // likeButton.textContent = `Like ${data[i].p_like}`;
-    // dislikeButton.textContent = `Dislike ${data[i].p_dislike}`
-    // likeButton.addEventListener("click",()=>{
-    //   socket.emit("likePost",data[i].post_id,sessionStorage.getItem("userId"))
-    // })
-    // dislikeButton.addEventListener("click",()=>{
-    //   socket.emit("dislikePost",data[i].post_id,sessionStorage.getItem("userId"))
-    // })
-    //comment
+    socket.emit("getAllDislikedPost", sessionStorage.getItem("userId"));
+    socket.emit("getAllLikedPost", sessionStorage.getItem("userId"));
+  
     let divComment = document.createElement("div");
     divComment.setAttribute("id",`${data[i].post_id}_comments`)
-    divComment.textContent = "Comments"
-    
-    // <div class="write-com">
-    //             <img src="" alt="user" class="user">
-    //             <textarea placeholder="Napisi komentar..." cols="70" rows="3" class="text-com"></textarea>
-    //         </div>
-   
+    divComment.className ="div-comment-class";
+  
 
 let divWriteCom = document.createElement("div");
 divWriteCom.className = "write-com"
@@ -262,11 +204,11 @@ let textArea = document.createElement("textarea");
 divWriteCom.append(imgComm,textArea)
     let buttonOpenComm = document.createElement("button");
     buttonOpenComm.setAttribute("id",`${data[i].post_id}_button_comments`)
-    buttonOpenComm.textContent = "See all comments"
-    // let inputComment = document.createElement("input");
-    // inputComment.setAttribute("placeholder","Add comment...")
-    // inputComment.style.display = 'block'
+    buttonOpenComm.className = "button-OpenComm-class"
+    buttonOpenComm.textContent = `Comment (${data[i].count_comments})`
+   
     let buttonComment = document.createElement("button");
+    buttonComment.className = "button-to-add-comment"
     buttonComment.textContent = "Add comment"
 
     buttonComment.addEventListener("click",()=>{
@@ -284,6 +226,7 @@ divWriteCom.append(imgComm,textArea)
     
 /////////////
     let divLD = document.createElement("div");
+    divLD.classList.add("center-div-buttons")
     divLD.append(likeButton,dislikeButton,divComment);
     // pDiv.append(divLD)
     
@@ -301,60 +244,11 @@ socket.on("showUpdatedLike",(result)=>{
   
   let button = document.getElementById(`${result.result[0][0].post_id}_like`);
   button.textContent = `Like ${result.result[0][0].p_like}`;
-  button.style.backgroundColor = "lightblue"
+  button.style.backgroundColor = "#caf1fd"
 })
 socket.on("showUpdatedDislike",(result)=>{
   
   let button = document.getElementById(`${result.result[0][0].post_id}_dislike`);
   button.textContent = `Deslike ${result.result[0][0].p_dislike}`;
-  button.style.backgroundColor = "lightblue"
+  button.style.backgroundColor = "#caf1fd"
 })
-socket.emit("getAllDislikedPost",sessionStorage.getItem("userId"));
-socket.emit("getAllLikedPost",sessionStorage.getItem("userId"));
-socket.on("allDislikedPost",(result)=>{
-    
-  for(let i = 0; i < result.result.length; i++){
-      let buttonLike = document.getElementById(`${result.result[i].post_id}_dislike`)
-     
-      if(buttonLike){ 
-
-        buttonLike.style.backgroundColor = 'lightblue';
-      }
-  }
-})
-
-socket.on("allLikedPost",(result)=>{
-    
-    for(let i = 0; i < result.result.length; i++){
-        let buttonLike = document.getElementById(`${result.result[i].post_id}_like`)
-        
-        if(buttonLike){
-
-          buttonLike.style.backgroundColor = 'lightblue';
-        }
-    }
-})
-
-// socket.on("showComment",(result)=>{
-  
-//   for(let i = 0; i < result.result.length; i++){
-    
-//     let p = document.createElement("p");
-//     let pUser = document.createElement("p");
-//     pUser.textContent = result.result[i].first_name + ' '+ result.result[i].last_name;
-//     p.setAttribute("id",`${result.result[i].post_meta_id}_comment` )
-//     p.textContent = result.result[i].comment
-//     pUser.style.fontWeight = "bold"
-//     document.getElementById(`${result.result[i].post_id}_inner_comments`).append(pUser,p)
-//   }
-// })
-
-// socket.on("showInsertComment",(comment,postId,firstName,lastName)=>{
-//   let p = document.createElement("p");
-//   let pUser = document.createElement("p");
-//   pUser.textContent = firstName + ' '+ lastName;
-//   p.setAttribute("id",`${postId}_comment` )
-//   p.textContent = comment
-//   pUser.style.fontWeight = "bold"
-//   document.getElementById(`${postId}_inner_comments`).append(pUser,p)
-// })

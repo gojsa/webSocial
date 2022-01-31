@@ -72,8 +72,8 @@ const getAllPosts = (userId, friendId) => new Promise((res, rejact) => {
 
 
     if (userId === friendId) {
-        const query = `select a.post_id,a.date_created,sql11462731.count_like_dislike(a.post_id, 'L')as p_like,sql11462731.count_like_dislike(a.post_id, 'D')as p_dislike,
-        a.description,b.image,a.date_created,u.first_name,u.last_name,pm.image as profile_image from posts a 
+        const query = `select u.user_id,a.post_id,a.date_created,sql11462731.count_like_dislike(a.post_id, 'L')as p_like,sql11462731.count_like_dislike(a.post_id, 'D')as p_dislike,
+        a.description, sql11462731.count_comments(a.post_id) as count_comments,b.image,a.date_created,u.first_name,u.last_name,pm.image as profile_image from posts a 
        join images b on a.image_id = b.image_id 
        join users u on a.user_id = u.user_id
        join images pm on a.user_id = pm.user_id
@@ -103,7 +103,7 @@ const getAllPosts = (userId, friendId) => new Promise((res, rejact) => {
             // res(results);
 
             if (results.length > 0) {
-                const query = `select mu.image as profile_image,u.first_name,u.last_name,a.post_id,sql11462731.count_like_dislike(a.post_id, 'L')as p_like,sql11462731.count_like_dislike(a.post_id, 'D')as p_dislike,
+                const query = `select u.user_id,sql11462731.count_comments(a.post_id) as count_comments, mu.image as profile_image,u.first_name,u.last_name,a.post_id,sql11462731.count_like_dislike(a.post_id, 'L')as p_like,sql11462731.count_like_dislike(a.post_id, 'D')as p_dislike,
                  a.description,b.image,a.date_created from posts a 
                  inner join images b on a.image_id = b.image_id 
                  join users u on a.user_id = u.user_id

@@ -16,6 +16,68 @@ body{
     border-radius: 4px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
 }
+.center-div-buttons{
+    margin-left: 25px;
+}
+.button-OpenComm-class{
+    width: 260px;
+    height: 35px;
+    border: none;
+    text-align: left;
+    background-color: #fbf9f9;
+    color: #4d4949;
+    font-size: 16px;
+    transition: 0.3s;
+    cursor: pointer;
+    text-align: center;
+}
+.button-OpenComm-class:hover{
+    background-color:#ebe4e4;
+}
+.button-to-add-comment{
+    height: 35px;
+    margin-left: 429px;
+    background: #fbf9f9;
+    border: none;
+    box-shadow: 0px 0px 2px;
+    margin-bottom: 4px;
+    cursor: pointer;
+
+}
+.button-to-add-comment:hover{
+    background-color:#ebe4e4;
+}
+.div-comment-class{
+    /* margin-left: 130px; */
+    margin-top: 5px;
+
+}
+.div-for-comments{
+    background-color: #ebe4e4;
+    border-radius: 7px;
+    padding: 5px;
+    margin: 2px;
+    width: 526px;
+
+}
+
+.button-like-dislike-class{
+    
+    width: 260px;
+    height: 35px;
+    border: none;
+    text-align: left;
+    /* border:1px solid; */
+    color: #4d4949;
+    font-size: 16px;
+    transition: 0.3s;
+    cursor: pointer;
+    text-align: center;
+    background-color: #fbf9f9;
+}
+.button-like-dislike-class:hover{
+    background-color:#ebe4e4;  
+}
 .left img{
     width: 130px;
     height: 130px;
@@ -80,6 +142,20 @@ input[type="file"]{
     width: 1000px;
     margin: auto;  
     margin-top: 15px;
+}
+.litle-friends-class{
+    display: inline-block;
+    margin: 5px;
+    text-align: center;
+}
+.friends-image-class{
+    width: 50px;
+    height: 50px;
+}
+.friends{
+    position: sticky;
+    top: 0px;
+    height: 400px;
 }
 .conteiner > div{
     
@@ -186,6 +262,7 @@ input[type="file"]{
 }
 .write-com{
     margin-top: 10px;   
+    width: min-content;
 }
 .text-com{
     border-radius: 30px;
@@ -208,7 +285,7 @@ input[type="file"]{
     padding: 20px 15px;
 }
 .friends{
-    display:flex;
+    /* display:flex; */
     align-items: flex-start;
     justify-content: space-between;
 }
