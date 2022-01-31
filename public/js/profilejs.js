@@ -35,7 +35,9 @@ console.log(allData[0].last_name)
   
   document.getElementById("profile_picture_id").setAttribute("src","http://"+ allData[0].image)
   document.getElementById("postUserImage").setAttribute("src","http://"+ allData[0].image)
-
+  const date = new Date(allData[0].birth_date);
+  const birthDate = date.getDate() + '/'+date.getMonth() + '/' + date.getFullYear();
+  // document.getElementById("dateOfBirthDateID").innerText = "Birthday "+ birthDate
 
 }).catch(function (err) {
   console.log(err);
@@ -251,4 +253,11 @@ socket.on("showUpdatedDislike",(result)=>{
   let button = document.getElementById(`${result.result[0][0].post_id}_dislike`);
   button.textContent = `Deslike ${result.result[0][0].p_dislike}`;
   button.style.backgroundColor = "#caf1fd"
+})
+const uploadProfileImage = document.getElementById("photo");
+uploadProfileImage.addEventListener("change",()=>{
+  console.log(111)
+const formImageUpload = document.getElementById("form_upload_pic_id");
+
+formImageUpload.submit()
 })

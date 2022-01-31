@@ -154,7 +154,7 @@ input[type="file"]{
 }
 .friends{
     position: sticky;
-    top: 0px;
+    top: 240px;
     height: 400px;
 }
 .conteiner > div{
@@ -203,6 +203,10 @@ input[type="file"]{
 }
 .submit:hover{
      opacity: 0.8;
+}
+.about{
+    top: 0;
+    position: sticky;
 }
 .about ul li{
     list-style: none;
