@@ -84,6 +84,9 @@ if(id != sessionStorage.getItem("userId")){
       <i class="fa fa-user-plus" style="font-size:20px">
       Accept?`
       //Logika za prihvatanje i odbijanje zahtjeva za prijateljstvo
+      buttonAddF.addEventListener("click",()=>{
+        socket.emit("acceptFriend",sessionStorage.getItem("userId"),id)
+      })
     }
     else{
       divAddFriendButton.addEventListener("click",()=>{

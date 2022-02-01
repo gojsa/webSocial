@@ -214,5 +214,13 @@ const getPostsFromFriends = (userId) => new Promise((res, rejact) => {
 })
 
 
+const acceptFriend = (userId, friendId) => new Promise((res, rejact) => {
+    const query = ` call sql11462731.accept_friend(${userId}, ${friendId})`;
+    db_connection.query(query, (err, results) => {
+        if (err) console.error(err);
+        res(results);
 
-module.exports = { saveImagePost, postText, getAllPosts, addFreind, checkTypeUser, likeDislike, getLikedPost, getDislikedPost, dislike, insertComment, getAllComents, getPostsFromFriends };
+    });
+})
+
+module.exports = { saveImagePost, postText, getAllPosts, addFreind, checkTypeUser, likeDislike, getLikedPost, getDislikedPost, dislike, insertComment, getAllComents, getPostsFromFriends,acceptFriend };

@@ -3,7 +3,7 @@ var socket = io.connect('http://127.0.0.1:4444', { transports: ['websocket', 'po
 socket.emit("userJoin", sessionStorage.getItem("userId"))
 // console.log(socket.id)
 socket.on("FriendRequestSend", (friendId) => {
-    console.log(friendId)
+    // console.log(friendId)
     // document.getElementById("div_add_friend_button").textContent = "Request sent"
 })
 let logedUserInfo = JSON.parse(sessionStorage.getItem("logedUser"));
@@ -16,7 +16,7 @@ let allMyFriends = {}
 const qqueryString = window.location.search;
 const uurlParams = new URLSearchParams(qqueryString)
 const idUser = uurlParams.get('id')
-console.log(idUser)
+// console.log(idUser)
 socket.on("showAllPostsFromFriends", (data) => {
     // console.log(data);
     // console.log(data.result[0].image)
@@ -405,8 +405,8 @@ socket.on("listOfAllFriendsArray", (result, id) => {
     
     allMyFriends = result;
     const friendsDiv = document.getElementById("friends_id");
-    console.log(idUser)
-    console.log(sessionStorage.getItem("userId"))
+    // console.log(idUser)
+    // console.log(sessionStorage.getItem("userId"))
     if(idUser == sessionStorage.getItem("userId")){
 for(let i = 0; i < result.result.length; i++){
     
@@ -440,8 +440,8 @@ for(let i = 0; i < result.result.length; i++){
          
 
         }
-        console.log(result.result[i].user_id)
-        console.log(id)
+        // console.log(result.result[i].user_id)
+        // console.log(id)
 
      
     }
@@ -510,7 +510,7 @@ socket.on("showYouOnline",(useriD)=>{
 
 
 
-console.log(allOnlineUsersForCheck);
+// console.log(allOnlineUsersForCheck);
 // for (let z = 0; z < allOnlineUsersForCheck.length; z++) {
 //     console.log(1313)
 //     console.log(allOnlineUsersForCheck[0])
@@ -522,7 +522,7 @@ console.log(allOnlineUsersForCheck);
 //     } 
     
 // }
-console.log(allOnlineUsersForCheck.length);
+// console.log(allOnlineUsersForCheck.length);
 
 for(let i = 0; i < allOnlineUsersForCheck.length; i++){
     console.log(allOnlineUsersForCheck.length)
