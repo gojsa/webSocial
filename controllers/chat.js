@@ -47,4 +47,18 @@ const findAllUser = (search) => new Promise((res, rejact) => {
     });
 })
 
-module.exports = { gitListoFfriends, insertMessage, updateMessage,findAllUser };
+const getAllFriendRequest = (userId) => new Promise((res, rejact) => {
+    const query = `
+    select * from user_group_members where group_id =
+(
+select user_group_id from user_groups where user_id = ${userId}
+) and status_id = 7
+    `
+    db_connection.query(query, (err, results) => {
+        if (err) console.error(err);
+        res(results);
+
+    });
+})
+
+module.exports = { gitListoFfriends, insertMessage, updateMessage,findAllUser,getAllFriendRequest };

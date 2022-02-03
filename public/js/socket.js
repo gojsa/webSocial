@@ -16,7 +16,12 @@ let allMyFriends = {}
 const qqueryString = window.location.search;
 const uurlParams = new URLSearchParams(qqueryString)
 const idUser = uurlParams.get('id')
-// console.log(idUser)
+
+socket.emit("getAllFriendsRequest",userID)
+socket.on("showAllFriendRequest",(result)=>{
+    console.log(result)
+})
+
 socket.on("showAllPostsFromFriends", (data) => {
     // console.log(data);
     // console.log(data.result[0].image)

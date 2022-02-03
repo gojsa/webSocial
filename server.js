@@ -22,7 +22,7 @@ const { userRegistration, saveImage } = require('./controllers/login_reg/registr
 const { saveImagePost, postText, getAllPosts, addFreind, checkTypeUser, likeDislike, getLikedPost, getDislikedPost, dislike, insertComment, getAllComents, getPostsFromFriends,acceptFriend } = require('./controllers/profile');
 const { userJoin, userLeave, getUser,getOnlineUsers } = require('./utils/users');
 const { messages } = require('./utils/messages');
-const { gitListoFfriends,insertMessage, updateMessage,findAllUser } = require('./controllers/chat');
+const { gitListoFfriends,insertMessage, updateMessage,findAllUser,getAllFriendRequest } = require('./controllers/chat');
 
 
 // const { redirect } = require("express/lib/response");
@@ -34,7 +34,11 @@ io.on('connection', socket => {
 
         socket.emit("telAllthahtYouOnline",userId,getOnlineUsers())
     })
-
+    socket.on("getAllFriendsRequest",(userId)=>{
+        getAllFriendRequest(userId).then((result)=>{
+            socket.emit("showAllFriendRequest",[result])
+        });
+    })
     socket.on("AllFriendsArray",(userId,friendId)=>{
         gitListoFfriends(userId).then((result)=>{
             let user = getUser(userId)
