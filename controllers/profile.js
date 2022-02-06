@@ -190,7 +190,7 @@ const getAllComents = (postId) => new Promise((res, rejact) => {
 })
 const getPostsFromFriends = (userId) => new Promise((res, rejact) => {
     const query = `
-    select u.first_name,u.last_name,a.user_id,a.post_id,sql11462731.count_like_dislike(a.post_id, 'L')as p_like,sql11462731.count_like_dislike(a.post_id, 'D')as p_dislike,
+    select 'localhost:4444/uploads/profile_images/profile_pic-1643617809861.jpg' as profile_image, u.first_name,u.last_name,a.user_id,a.post_id,sql11462731.count_like_dislike(a.post_id, 'L')as p_like,sql11462731.count_like_dislike(a.post_id, 'D')as p_dislike,
     a.description,b.image,a.date_created from posts a 
    join images b on a.image_id = b.image_id join users u on a.user_id = u.user_id
     where b.status_id = 2 and a.user_id in (

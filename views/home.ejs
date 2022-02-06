@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -33,5 +33,160 @@
 
 
 </body>
+
+</html> -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home page</title>
+    <link rel="stylesheet" href="css/home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+    <nav>
+        <div class="search">
+            <i class="fa fa-search" style="font-size:20px"></i>
+            <input type="text" placeholder="Search..." id="search_id">
+        </div>
+
+        <div class="nav-center">
+            <a href="">
+                <i class="fa fa-home" style="font-size:24px"></i>
+            </a>
+
+            <a href="">
+                <i class="fa fa-user" style="font-size:24px"></i>
+            </a>
+        </div>
+
+       <div class="nav-right">
+           <div class="notification">
+           <ul>
+               <li><i class="fa fa-user" style="font-size:18px"></i></li>
+               <li><i class="fa fa-comments" style="font-size:18px"></i></li>
+               <li><i class="fa fa-bell" style="font-size:18px"></i></li>
+           </ul>
+        </div>
+    
+        <div class="log-out">
+           <a href=""><i class="fa fa-sign-out" style="font-size:23px"></i><span>Log out</span></a>
+           <img src="images.jpg" alt="user" class="user">  
+        </div>
+        </div>
+    </nav>
+    
+    <div class="conteiner">
+    
+        <div class="center">
+//////
+<div class="write-post">
+
+            <h4>Post</h4>
+
+            <div class="post">
+                <img id="postUserImage" src="" alt="user" class="user">
+                <textarea id="sometext" placeholder="Write post" cols="65" rows="4"></textarea>
+            </div>
+
+            <div class="add-photo">
+                <form id="form_post_id"  enctype="multipart/form-data" method="post">
+                <label for="add"><i class="fa fa-image" style="font-size:24px; color:#80B25D;"></i>
+                    <small style="color:rgb(80, 75, 75);">Add image</small></label>
+                <input type="file" name="profile_pic" id="add">
+                <button id="btn_upload_post_id" class="button-to-add-comment" ><strong>Add post</strong> </button>
+            </form>
+            </div>
+        </div>
+
+        <!-- <div class="slike">
+            <div class="sve-slike">
+                <h4>Fotografije</h4>
+                <a href="">Sve fotografije</a>
+            </div>
+        </div> -->
+       
+        
+<!-- post krece odavde -->
+<div id="allMyPosts"></div>
+            <!-- <div class="write-post">
+                <h4>Post</h4>
+                
+                <div class="post">
+                    <img src="images.jpg" alt="user" class="user">
+                    <textarea placeholder="Objavi post" cols ="72" rows="4"></textarea> 
+                </div>
+                
+                <div class="add-photo">
+                    <label for="add"><i class="fa fa-image" style="font-size:20px; color:#80B25D;"></i>
+                        <small style="color:rgb(80, 75, 75);">Dodaj sliku</small></label>
+                        <input type="file" id="add">
+                        <button type="submit" class="submit"><strong>Objavi</strong> </button> 
+                </div>
+            </div> -->
+
+            <!-- <div class="post2">
+                <div class="user-profil">
+                    <img src="images.jpg" alt="user" class="user">
+                    <span class="span">
+                        <h4 style="color: rgb(51, 49, 49);">Zoran Blagojevic</h4> &nbsp; <p style="color: #726d6d;;">je objavio post</p> &nbsp; 
+                    </span>
+                    <small>22:42</small>
+                </div>
+                
+                <div class="foto" >
+                    <img src="download.jpg" width="600px" height="410px">
+                </div>
+                
+                <div class="like-com">
+                    <button class="like"><i class="fa fa-thumbs-o-up" style="font-size:20px"></i> &nbsp; <p>23</p></button>
+                    <button class="like"><i class="fa fa-thumbs-o-down" style="font-size:20px"></i> &nbsp; <p>2</p></button>
+                    <button class="coment"><i class="fa fa-comments-o" style="font-size:20px"></i> &nbsp; <p>3</p></button>
+                </div>
+                
+                <div class="write-com">
+                    <img src="images.jpg" alt="user" class="user">
+                    <textarea placeholder="Napisi komentar..." cols="70" rows="3" class="text-com"></textarea>
+                </div>
+            </div> -->
+
+            <!-- <div class="post2">
+                <div class="user-profil">
+                    <img src="images.jpg" alt="user" class="user">
+                    <span class="span">   <h4 style="color: rgb(51, 49, 49);">Zoran Blagojevic</h4> &nbsp; <p style="color: #726d6d;;">je objavio post</p> &nbsp; 
+                    </span>
+                    <small><i class="fa fa-clock-o"></i>&nbsp;22:42</small>
+                </div>
+                
+                <div class="foto" >
+                    <p>asdsdkfdgdhfj</p>
+                </div>
+                
+                <div class="like-com">
+                    <button class="like"><i class="fa fa-thumbs-o-up" style="font-size:20px"></i> &nbsp; <p>23</p></button>
+                    <button class="like"><i class="fa fa-thumbs-o-down" style="font-size:20px"></i> &nbsp; <p>2</p></button>
+                    <button class="coment"><i class="fa fa-comments-o" style="font-size:20px"></i> &nbsp; <p>3</p></button>
+                </div>
+                
+                <div class="write-com">
+                    <img src="images.jpg" alt="user" class="user">
+                    <textarea placeholder="Napisi komentar..." cols="70" rows="3" class="text-com"></textarea>
+                </div>
+            </div> -->
+
+        </div>
+        
+
+    </div>
+    <button id="openChat">Chat</button>
+    <div id="openchatBoxId">
+    <script src="https://cdn.socket.io/4.4.1/socket.io.min.js"
+    integrity="sha384-fKnu0iswBIqkjxrhQCTZ7qlLHOFEgNkRmK2vaO/LbTZSXdJfAu6ewRBdwHPhBo/H"
+    crossorigin="anonymous"></script>
+    <script src="js/socket.js"></script>
+        <!-- <script src="js/profilejs.js"></script> -->
+</body>
+
+
 
 </html>
