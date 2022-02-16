@@ -135,8 +135,8 @@ socket.on("showAllPostsFromFriends", (data) => {
         let buttonOpenComm = document.createElement("button");
         buttonOpenComm.setAttribute("id",`${data.result[i].post_id}_button_comments`)
         buttonOpenComm.className = "button-OpenComm-class"
-        buttonOpenComm.textContent = `Comment (${data.result[i].count_comments})`
-       
+       buttonOpenComm.textContent = `Comment (${data.result[i].count_comments})`
+      
         let buttonComment = document.createElement("button");
         buttonComment.className = "button-to-add-comment"
         buttonComment.textContent = "Add comment"
@@ -151,6 +151,7 @@ socket.on("showAllPostsFromFriends", (data) => {
         divInnerComment.setAttribute("id",`${data.result[i].post_id}_inner_comments`);
         divInnerComment.append(divWriteCom,buttonComment)
         divInnerComment.style.display = "none"
+        divInnerComment.style.backgroundColor = "white"
         divComment.append(buttonOpenComm,divInnerComment)
     
         

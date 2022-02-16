@@ -215,3 +215,57 @@ input[type="file"]{
     resize: none;
     background-color: #ebe4e4;  
 }
+
+.button-like-dislike-class{
+    
+    width: 260px;
+    height: 35px;
+    border: none;
+    text-align: left;
+    /* border:1px solid; */
+    color: #4d4949;
+    font-size: 16px;
+    transition: 0.3s;
+    cursor: pointer;
+    text-align: center;
+    background-color: #fbf9f9;
+}
+.button-like-dislike-class:hover{
+    background-color:#ebe4e4;  
+}
+.button-OpenComm-class{
+    width: 260px;
+    height: 35px;
+    border: none;
+    text-align: left;
+    background-color: #fbf9f9;
+    color: #4d4949;
+    font-size: 16px;
+    transition: 0.3s;
+    cursor: pointer;
+    text-align: center;
+}
+.button-OpenComm-class:hover{
+    background-color:#ebe4e4;
+}
+.div-for-comments{
+    background-color: #ebe4e4;
+    border-radius: 7px;
+    padding: 5px;
+    margin: 2px;
+    width: 526px;
+
+}
+.button-to-add-comment{
+    height: 35px;
+    margin-left: 429px;
+    background: #fbf9f9;
+    border: none;
+    box-shadow: 0px 0px 2px;
+    margin-bottom: 4px;
+    cursor: pointer;
+
+}
+.button-to-add-comment:hover{
+    background-color:#ebe4e4;
+}
